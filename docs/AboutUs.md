@@ -9,22 +9,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### Brenda Tan 
-
-<img src="images/brenda77777.png" width="200px">
-
-[[homepage](http://www.comp.nus.edu.sg/~damithch=)]
-[[github](https://github.com/brenda77777)]
-[[portfolio](team/johndoe.md)]
-
-
 ### Gao Huiying
 
 <img src="images/ghyyuan.png" width="200px">
 
 [[github](https://github.com/ghyyuan)]
 
-* Role: Project Advisor
+* Role: Software Developer (Integration)
+* Responsibilities: Lead the implementation of core features, ensuring system reliability through unit testing and documentation.
+Manage the project repository and branching strategy to integrate individual modules into a cohesive, high-quality software release.
 
 ### Li Qiyu
 
@@ -34,14 +27,23 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Team Leader
 
-### Johnny Doe
+### Xingchen
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/Xingchen722.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](https://github.com/Xingchen722]
 
-* Role: Developer
-* Responsibilities: Data
+* Role: Tech Lead
+* Responsibilities: software development
+
+### Brenda
+
+<img src="images/brenda77777.png" width="200px">
+
+[[github](https://github.com/brenda77777)] [[portfolio](team/johndoe.md)]
+
+* Role: Tech Lead 
+* Responsibilities: Backend development
 
 ### Jean Doe
 
