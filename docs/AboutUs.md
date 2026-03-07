@@ -38,9 +38,9 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Team Leader
 * Responsibilities: software development
 
-### Xingchen
+### Guo Xingchen
 
-<img src="images/Xingchen722.png" width="200px">
+<img src="images/xingchen722.png" width="200px">
 
 [[github](https://github.com/Xingchen722)]
 
