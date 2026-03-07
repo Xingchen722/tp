@@ -286,30 +286,155 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *{More to be added}*
 
-### Use cases
+## Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `Hired!` and the **Actor** is a `student`, unless specified otherwise)
 
-**Use case: Delete a person**
+### **UC01 - Add an Application Record**
+
+**Precondition**
+
+* System is running
+* Student is authorized.
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1. Student requests to add a new internship application.
+2. System requests for application details: company, HR name, role, deadline.
+3. Student provides the required details.
+4. System validates the input.
+5. System saves the application and assigns a unique ID.
+6. System displays the newly added application.  
+
+   Use case ends.
+
+**Extension**
+
+* 3a. Student leaves some fields unknown. 
+  * 3a1. Student marks fields as NA. 
+  
+    Use case resumes at step 4.
+
+* 4a. System detects invalid input (empty company, wrong date format).
+  * 4a1. System shows an error message.
+  * 4a2. Student re‑enters valid data. 
+  
+    Use case resumes at step 4.
+
+* 4b. System detects a duplicate application.
+  * 4b1. System informs the student. 
+  
+    Use case ends.
+
+* *a. Student cancels the add operation at any time.
+  * *a1. System aborts the operation. 
+  
+    Use case ends.
+
+
+
+### **UC02 – Update Application Status**
+
+**Precondition** 
+
+* System is running
+* Student is authorized
+* At least one application exists in the system.
+
+**MSS**
+
+1. Student requests to update an application’s status.
+2. Student provides an application ID or list index.
+3. System verifies the application exists.
+4. Student provides a new status.
+5. System validates the status value.
+6. System updates the status.
+7. System displays the updated application.
+
+   Use case ends.
+
+**Extensions**
+* 3a. Application ID/index does not exist.
+  * 3a1. System shows an error. 
+    
+    Use case ends.
+
+* 5a. Status value is invalid.
+  * 5a1. System shows valid options.
+  * 5a2. Student enters a valid status. 
+    
+    Use case resumes at step 5.
+
+* 6a. Status is a terminal state (e.g., Rejected/Offered).
+  * 6a1. System shows a warning and requests confirmation.
+  * 6a2. Student confirms. 
+  
+    Use case resumes at step 6.
+
+* *a. Student cancels at any time.
+  * *a1. System cancels the update. 
+  
+    Use case ends.
+
+
+### **UC03 – List and Sort Applications**
+
+**Precondition** 
+
+* System is running.
+
+**MSS**
+
+1. Student requests to view the application list.
+2. System retrieves all stored applications.
+3. System displays all applications in a structured list.
+
+   Use case ends.
+
+**Extensions**
+
+* 2a. There are no applications.
+  * 2a1. System informs the student. 
+  * Use case ends.
+
+* 3a. Student requests sorting by deadline.
+  *  3a1. System sorts applications by deadline.
+  * 3a2. System displays the sorted list. 
+  * Use case ends.
+
+* 3b. Student requests filtering by status.
+  * 3b1. System filters applications.
+  * 3b2. System displays filtered results. 
+  
+    Use case ends.
+
+### **UC04: Delete an application**
+
+**Precondition**
+
+* System is running
+* Student is authorized.
+* At least one application exists in the system
+
+**MSS**
+
+1.  Student requests to list applications
+2.  Hired! shows a list of applications
+3.  Student requests to delete a specific application in the list
+4.  Hired! deletes the person
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. The list is empty.
+  * 1a1. Hired! informs user the list is empty
 
-  Use case ends.
+    Use case ends.
 
 * 3a. The given index is invalid.
 
-    * 3a1. AddressBook shows an error message.
+    * 3a1. Hired! shows an error message.
 
       Use case resumes at step 2.
 
@@ -318,7 +443,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
+2.  Should be able to hold up to 1000 applications without a noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 
 *{More to be added}*
