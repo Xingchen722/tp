@@ -53,5 +53,5 @@ Manage the project repository and branching strategy to integrate individual mod
 
 [[github](https://github.com/brenda77777)]
 
-* Role: Tech Lead 
+* Role: Tech Lead
 * Responsibilities: Backend development
