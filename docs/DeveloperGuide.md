@@ -260,31 +260,47 @@ _{Explain here how the data archiving feature will be implemented}_
 
 ### Product scope
 
-**Target user profile**:
+### Target user profile
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+Hired! is designed for university students who are applying for internships and need to manage multiple
+application records, deadlines, contacts, and interview progress efficiently.
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+Our target users:
+* need to manage a significant number of internship applications and related contacts
+* prefer a desktop application over mobile notes or spreadsheets
+* can type quickly
+* prefer typing to mouse interactions
+* are reasonably comfortable using CLI applications
+* want a structured way to track internship applications, deadlines, and follow-ups
 
+**Value proposition**: Hired! helps university students manage internship applications, company contacts, deadlines, 
+                       and interview records faster and more systematically than scattered notes or spreadsheet-based
+                       tracking.
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
-| -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
-
-*{More to be added}*
+| Priority | As a … | I want to … | So that I can… |
+| --- | --- | --- | --- |
+| `* * *` | student applying for internships | add a new application record | keep track of the companies and roles I applied to |
+| `* * *` | student applying for internships | record the HR representative’s name | follow up professionally with companies |
+| `* * *` | student applying for internships | record internship roles offered | remember the positions available |
+| `* * *` | student applying for internships | record application deadlines | avoid missing submission dates |
+| `* * *` | student applying for internships | update the status of an application | track whether my application is pending, interviewing, rejected, or offered |
+| `* * *` | student applying for internships | view all my application records | get an overview of my internship applications |
+| `* * *` | student applying for internships | sort applications by deadline | handle urgent applications first |
+| `* * *` | student applying for internships | delete an application record | remove incorrect or outdated entries |
+| `* *` | student applying for internships | search by company name or role | quickly find a specific application |
+| `* *` | student applying for internships | categorize companies by industry | organize applications more clearly |
+| `* *` | student applying for internships | tag companies by interest level | prioritize which opportunities to focus on |
+| `* *` | student applying for internships | record interview dates and format | prepare appropriately for interviews |
+| `* *` | student applying for internships | take notes on interview questions | reflect and improve for future interviews |
+| `* *` | student applying for internships | filter applications by status | focus on active applications only |
+| `*` | student applying for internships | set reminders for deadlines or follow-ups | avoid missing important next steps |
+| `*` | long-term user | archive old application records | keep the application list organized |
+| `*` | long-term user | export internship records | analyse my application progress outside the app |
+| `*` | long-term user | view a summary of application outcomes | understand my internship search performance |
 
 ### Use cases
 
