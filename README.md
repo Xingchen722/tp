@@ -56,7 +56,7 @@ The following features may be added in future versions:
 ## Contributing
 This project was developed by cs students based on AddressBook Level 3 (AB3).
 - [Brenda Tan Kai Xin](https://github.com/brenda77777)
-- [Gao HuiYing](https://github.com/ghyyuan)
+- [Gao Huiying](https://github.com/ghyyuan)
 - [Guo Xingchen](https://github.com/Xingchen722)
 - [Li Qiyu](http://github.com/leechy67)
 - [Oh Jing Yang](http://github.com/Jiya-OH)
