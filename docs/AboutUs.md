@@ -47,11 +47,12 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Tech Lead
 * Responsibilities: software development
 
-### Brenda
+### Brenda Tan Kai Xin
 
 <img src="images/brenda77777.png" width="200px">
 
 [[github](https://github.com/brenda77777)]
 
-* Role: Tech Lead
-* Responsibilities: Backend development
+* Role: Tech Lead 
+* Responsibilities: Design and implement backend features. Review pull requests and maintain code quality.
+Coordinate integration of team features.
