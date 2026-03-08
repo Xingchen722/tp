@@ -317,11 +317,28 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Non-Functional Requirements
 
+**Technical Requirements**
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+2.  The system should operate as a standalone application without requiring an active internet connection.
+3.  The system must store all internship and contact data in a _local text file_ (JSON format) and must _not_ require the installation or use of any external Database Management System (e.g., MySQL, PostgreSQL).
+4.  The system must be developed using only standard Java `17` libraries and the JavaFX framework. Any third-party libraries must be less than `10MB` in total and must not require separate installation by the user.
+5.  The entire application must be packaged into a single executable JAR file not exceeding `100MB`. The user should be able to run it by simply double-clicking the file, provided Java `17` is installed.
 
-*{More to be added}*
+**Performance Requirements**
+1. Should be able to hold up to `1000` persons without a noticeable sluggishness in performance for typical usage.
+2. The system should respond to any valid user command (e.g., adding a company or filtering contacts) within `100` milliseconds under normal usage conditions.
+
+**Usability Requirements**
+1.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+2.  All critical features (creating an application, linking a contact) must be _executable entirely_ via keyboard without requiring mouse interaction.
+3.  A tech-savvy user should be able to master the basic commands (Add, Find, List, Edit) within `10` minutes of reading the User Guide.
+
+**Reliability & Data Integrity**
+1. The system must _automatically_ save all changes to the local storage after every successful state-changing command (e.g., add, edit, delete) to prevent data loss in case of a crash or accidental exit.
+2. If a command involves multiple steps, the operation must be atomic. Either both changes are made correctly, or no changes are saved at all.
+3. A tech-savvy user should be able to open the data file in a standard text editor and understand the relationships between companies and contacts.
+4. The system must be able to read and migrate data files produced by earlier versions of the same product within the same major version.
+5. The system should prevent the entry of _logically inconsistent_ data, such as an internship "Deadline" that predates the "Application Date."
 
 ### Glossary
 
