@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import seedu.company.logic.commands.EditCommand.EditApplicationDescriptor;
 import seedu.company.model.application.Company;
-import seedu.company.model.application.HrEmail;
+import seedu.company.model.application.hrEmail;
 import seedu.company.model.application.Application;
 import seedu.company.model.application.Phone;
 import seedu.company.model.application.Role;
@@ -34,7 +34,7 @@ public class EditApplicationDescriptorBuilder {
         descriptor = new EditApplicationDescriptor();
         descriptor.setRole(application.getRole());
         descriptor.setPhone(application.getPhone());
-        descriptor.setEmail(application.getEmail());
+        descriptor.setHrEmail(application.getHrEmail());
         descriptor.setCompany(application.getCompany());
         descriptor.setTags(application.getTags());
     }
@@ -56,10 +56,10 @@ public class EditApplicationDescriptorBuilder {
     }
 
     /**
-     * Sets the {@code Email} of the {@code EditApplicationDescriptor} that we are building.
+     * Sets the {@code HrEmail} of the {@code EditApplicationDescriptor} that we are building.
      */
-    public EditApplicationDescriptorBuilder withEmail(String hrEmail) {
-        descriptor.setEmail(new HrEmail(hrEmail));
+    public EditApplicationDescriptorBuilder withHrEmail(String hrEmail) {
+        descriptor.setHrEmail(new hrEmail(hrEmail));
         return this;
     }
 

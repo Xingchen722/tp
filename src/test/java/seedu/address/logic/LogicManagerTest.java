@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.company.logic.Messages.MESSAGE_INVALID_APPLICATION_DISPLAYED_INDEX;
 import static seedu.company.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.company.logic.commands.CommandTestUtil.COMPANY_DESC_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
+import static seedu.company.logic.commands.CommandTestUtil.HREMAIL_DESC_AMY;
 import static seedu.company.logic.commands.CommandTestUtil.ROLE_DESC_AMY;
 import static seedu.company.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static seedu.company.testutil.Assert.assertThrows;
@@ -166,7 +166,7 @@ public class LogicManagerTest {
 
         // Triggers the saveCompanyBook method by executing an add command
         String addCommand = AddCommand.COMMAND_WORD + ROLE_DESC_AMY + PHONE_DESC_AMY
-                + EMAIL_DESC_AMY + COMPANY_DESC_AMY;
+                + HREMAIL_DESC_AMY + COMPANY_DESC_AMY;
         Application expectedApplication = new ApplicationBuilder(AMY).withTags().build();
         ModelManager expectedModel = new ModelManager();
         expectedModel.addApplication(expectedApplication);

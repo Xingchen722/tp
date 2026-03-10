@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.company.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.company.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.company.logic.commands.CommandTestUtil.VALID_HREMAIL_BOB;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
@@ -45,7 +45,7 @@ public class EditApplicationDescriptorTest {
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different hrEmail -> returns false
-        editedAmy = new EditApplicationDescriptorBuilder(DESC_AMY).withEmail(VALID_EMAIL_BOB).build();
+        editedAmy = new EditApplicationDescriptorBuilder(DESC_AMY).withHrEmail(VALID_HREMAIL_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different company -> returns false
@@ -63,7 +63,7 @@ public class EditApplicationDescriptorTest {
         String expected = EditApplicationDescriptor.class.getCanonicalRole() + "{role="
                 + editApplicationDescriptor.getRole().orElse(null) + ", phone="
                 + editApplicationDescriptor.getPhone().orElse(null) + ", hrEmail="
-                + editApplicationDescriptor.getEmail().orElse(null) + ", company="
+                + editApplicationDescriptor.getHrEmail().orElse(null) + ", company="
                 + editApplicationDescriptor.getCompany().orElse(null) + ", tags="
                 + editApplicationDescriptor.getTags().orElse(null) + "}";
         assertEquals(expected, editApplicationDescriptor.toString());

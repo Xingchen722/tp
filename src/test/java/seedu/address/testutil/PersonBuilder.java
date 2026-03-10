@@ -5,7 +5,7 @@ import java.util.Set;
 
 import seedu.company.model.application.Application;
 import seedu.company.model.application.Company;
-import seedu.company.model.application.HrEmail;
+import seedu.company.model.application.hrEmail;
 import seedu.company.model.application.Phone;
 import seedu.company.model.application.Role;
 import seedu.company.model.tag.Tag;
@@ -18,12 +18,12 @@ public class ApplicationBuilder {
 
     public static final String DEFAULT_ROLE = "Amy Bee";
     public static final String DEFAULT_PHONE = "85355255";
-    public static final String DEFAULT_EMAIL = "amy@gmail.com";
+    public static final String DEFAULT_HREMAIL = "amy@gmail.com";
     public static final String DEFAULT_COMPANY = "123, Jurong West Ave 6, #08-111";
 
     private Role role;
     private Phone phone;
-    private HrEmail hrEmail;
+    private hrEmail hrEmail;
     private Company company;
     private Set<Tag> tags;
 
@@ -33,7 +33,7 @@ public class ApplicationBuilder {
     public ApplicationBuilder() {
         role = new Role(DEFAULT_ROLE);
         phone = new Phone(DEFAULT_PHONE);
-        hrEmail = new HrEmail(DEFAULT_EMAIL);
+        hrEmail = new hrEmail(DEFAULT_HREMAIL);
         company = new Company(DEFAULT_COMPANY);
         tags = new HashSet<>();
     }
@@ -44,7 +44,7 @@ public class ApplicationBuilder {
     public ApplicationBuilder(Application applicationToCopy) {
         role = applicationToCopy.getRole();
         phone = applicationToCopy.getPhone();
-        hrEmail = applicationToCopy.getEmail();
+        hrEmail = applicationToCopy.getHrEmail();
         company = applicationToCopy.getCompany();
         tags = new HashSet<>(applicationToCopy.getTags());
     }
@@ -82,10 +82,10 @@ public class ApplicationBuilder {
     }
 
     /**
-     * Sets the {@code Email} of the {@code Application} that we are building.
+     * Sets the {@code HrEmail} of the {@code Application} that we are building.
      */
-    public ApplicationBuilder withEmail(String hrEmail) {
-        this.hrEmail = new HrEmail(hrEmail);
+    public ApplicationBuilder withHrEmail(String hrEmail) {
+        this.hrEmail = new hrEmail(hrEmail);
         return this;
     }
 

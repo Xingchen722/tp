@@ -71,7 +71,7 @@ public class RoleContainsKeywordsPredicateTest {
         // Keywords match phone, hrEmail and company, but does not match role
         predicate = new RoleContainsKeywordsPredicate(Arrays.asList("12345", "alice@hrEmail.com", "Main", "Street"));
         assertFalse(predicate.test(new ApplicationBuilder().withRole("Alice").withPhone("12345")
-                .withEmail("alice@hrEmail.com").withCompany("Main Street").build()));
+                .withHrEmail("alice@hrEmail.com").withCompany("Main Street").build()));
     }
 
     @Test

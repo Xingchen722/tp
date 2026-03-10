@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.company.logic.parser.exceptions.ParseException;
 import seedu.company.model.application.Company;
-import seedu.company.model.application.HrEmail;
+import seedu.company.model.application.hrEmail;
 import seedu.company.model.application.Phone;
 import seedu.company.model.application.Role;
 import seedu.company.model.tag.Tag;
@@ -24,13 +24,13 @@ public class ParserUtilTest {
     private static final String INVALID_ROLE = "R@chel";
     private static final String INVALID_PHONE = "+651234";
     private static final String INVALID_COMPANY = " ";
-    private static final String INVALID_EMAIL = "example.com";
+    private static final String INVALID_HREMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
 
     private static final String VALID_ROLE = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
     private static final String VALID_COMPANY = "123 Main Street #0505";
-    private static final String VALID_EMAIL = "rachel@example.com";
+    private static final String VALID_HREMAIL = "rachel@example.com";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
 
@@ -126,26 +126,26 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseEmail_null_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> ParserUtil.parseEmail((String) null));
+    public void parseHrEmail_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseHrEmail((String) null));
     }
 
     @Test
-    public void parseEmail_invalidValue_throwsParseException() {
-        assertThrows(ParseException.class, () -> ParserUtil.parseEmail(INVALID_EMAIL));
+    public void parseHrEmail_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseHrEmail(INVALID_HREMAIL));
     }
 
     @Test
-    public void parseEmail_validValueWithoutWhitespace_returnsEmail() throws Exception {
-        HrEmail expectedHrEmail = new HrEmail(VALID_EMAIL);
-        assertEquals(expectedHrEmail, ParserUtil.parseEmail(VALID_EMAIL));
+    public void parseHrEmail_validValueWithoutWhitespace_returnsHrEmail() throws Exception {
+        hrEmail expectedhrEmail = new hrEmail(VALID_HREMAIL);
+        assertEquals(expectedhrEmail, ParserUtil.parseHrEmail(VALID_HREMAIL));
     }
 
     @Test
-    public void parseEmail_validValueWithWhitespace_returnsTrimmedEmail() throws Exception {
-        String hrEmailWithWhitespace = WHITESPACE + VALID_EMAIL + WHITESPACE;
-        HrEmail expectedHrEmail = new HrEmail(VALID_EMAIL);
-        assertEquals(expectedHrEmail, ParserUtil.parseEmail(hrEmailWithWhitespace));
+    public void parseHrEmail_validValueWithWhitespace_returnsTrimmedHrEmail() throws Exception {
+        String hrEmailWithWhitespace = WHITESPACE + VALID_HREMAIL + WHITESPACE;
+        hrEmail expectedhrEmail = new hrEmail(VALID_HREMAIL);
+        assertEquals(expectedhrEmail, ParserUtil.parseHrEmail(hrEmailWithWhitespace));
     }
 
     @Test

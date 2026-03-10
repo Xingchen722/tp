@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.company.logic.commands.CommandTestUtil.VALID_HREMAIL_BOB;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
@@ -33,7 +33,7 @@ public class ApplicationTest {
         assertFalse(ALICE.isSameApplication(null));
 
         // same role, all other attributes different -> returns true
-        Application editedAlice = new ApplicationBuilder(ALICE).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
+        Application editedAlice = new ApplicationBuilder(ALICE).withPhone(VALID_PHONE_BOB).withHrEmail(VALID_HREMAIL_BOB)
                 .withCompany(VALID_COMPANY_BOB).withTags(VALID_TAG_HUSBAND).build();
         assertTrue(ALICE.isSameApplication(editedAlice));
 
@@ -78,7 +78,7 @@ public class ApplicationTest {
         assertFalse(ALICE.equals(editedAlice));
 
         // different hrEmail -> returns false
-        editedAlice = new ApplicationBuilder(ALICE).withEmail(VALID_EMAIL_BOB).build();
+        editedAlice = new ApplicationBuilder(ALICE).withHrEmail(VALID_HREMAIL_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different company -> returns false
@@ -93,7 +93,7 @@ public class ApplicationTest {
     @Test
     public void toStringMethod() {
         String expected = Application.class.getCanonicalRole() + "{role=" + ALICE.getRole() + ", phone=" + ALICE.getPhone()
-                + ", hrEmail=" + ALICE.getEmail() + ", company=" + ALICE.getCompany() + ", tags=" + ALICE.getTags() + "}";
+                + ", hrEmail=" + ALICE.getHrEmail() + ", company=" + ALICE.getCompany() + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

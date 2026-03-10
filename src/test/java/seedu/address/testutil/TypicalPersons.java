@@ -2,8 +2,8 @@ package seedu.company.testutil;
 
 import static seedu.company.logic.commands.CommandTestUtil.VALID_COMPANY_AMY;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_COMPANY_BOB;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
-import static seedu.company.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.company.logic.commands.CommandTestUtil.VALID_HREMAIL_AMY;
+import static seedu.company.logic.commands.CommandTestUtil.VALID_HREMAIL_BOB;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_ROLE_AMY;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
 import static seedu.company.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
@@ -24,35 +24,35 @@ import seedu.company.model.application.Application;
 public class TypicalApplications {
 
     public static final Application ALICE = new ApplicationBuilder().withRole("Alice Pauline")
-            .withCompany("123, Jurong West Ave 6, #08-111").withEmail("alice@example.com")
+            .withCompany("123, Jurong West Ave 6, #08-111").withHrEmail("alice@example.com")
             .withPhone("94351253")
             .withTags("friends").build();
     public static final Application BENSON = new ApplicationBuilder().withRole("Benson Meier")
             .withCompany("311, Clementi Ave 2, #02-25")
-            .withEmail("johnd@example.com").withPhone("98765432")
+            .withHrEmail("johnd@example.com").withPhone("98765432")
             .withTags("owesMoney", "friends").build();
     public static final Application CARL = new ApplicationBuilder().withRole("Carl Kurz").withPhone("95352563")
-            .withEmail("heinz@example.com").withCompany("wall street").build();
+            .withHrEmail("heinz@example.com").withCompany("wall street").build();
     public static final Application DANIEL = new ApplicationBuilder().withRole("Daniel Meier").withPhone("87652533")
-            .withEmail("cornelia@example.com").withCompany("10th street").withTags("friends").build();
+            .withHrEmail("cornelia@example.com").withCompany("10th street").withTags("friends").build();
     public static final Application ELLE = new ApplicationBuilder().withRole("Elle Meyer").withPhone("9482224")
-            .withEmail("werner@example.com").withCompany("michegan ave").build();
+            .withHrEmail("werner@example.com").withCompany("michegan ave").build();
     public static final Application FIONA = new ApplicationBuilder().withRole("Fiona Kunz").withPhone("9482427")
-            .withEmail("lydia@example.com").withCompany("little tokyo").build();
+            .withHrEmail("lydia@example.com").withCompany("little tokyo").build();
     public static final Application GEORGE = new ApplicationBuilder().withRole("George Best").withPhone("9482442")
-            .withEmail("anna@example.com").withCompany("4th street").build();
+            .withHrEmail("anna@example.com").withCompany("4th street").build();
 
     // Manually added
     public static final Application HOON = new ApplicationBuilder().withRole("Hoon Meier").withPhone("8482424")
-            .withEmail("stefan@example.com").withCompany("little india").build();
+            .withHrEmail("stefan@example.com").withCompany("little india").build();
     public static final Application IDA = new ApplicationBuilder().withRole("Ida Mueller").withPhone("8482131")
-            .withEmail("hans@example.com").withCompany("chicago ave").build();
+            .withHrEmail("hans@example.com").withCompany("chicago ave").build();
 
     // Manually added - Application's details found in {@code CommandTestUtil}
     public static final Application AMY = new ApplicationBuilder().withRole(VALID_ROLE_AMY).withPhone(VALID_PHONE_AMY)
-            .withEmail(VALID_EMAIL_AMY).withCompany(VALID_COMPANY_AMY).withTags(VALID_TAG_FRIEND).build();
+            .withHrEmail(VALID_HREMAIL_AMY).withCompany(VALID_COMPANY_AMY).withTags(VALID_TAG_FRIEND).build();
     public static final Application BOB = new ApplicationBuilder().withRole(VALID_ROLE_BOB).withPhone(VALID_PHONE_BOB)
-            .withEmail(VALID_EMAIL_BOB).withCompany(VALID_COMPANY_BOB).withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
+            .withHrEmail(VALID_HREMAIL_BOB).withCompany(VALID_COMPANY_BOB).withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
             .build();
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER

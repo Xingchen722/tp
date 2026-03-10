@@ -1,7 +1,7 @@
 package seedu.company.testutil;
 
 import static seedu.company.logic.parser.CliSyntax.PREFIX_COMPANY;
-import static seedu.company.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.company.logic.parser.CliSyntax.PREFIX_HREMAIL;
 import static seedu.company.logic.parser.CliSyntax.PREFIX_ROLE;
 import static seedu.company.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.company.logic.parser.CliSyntax.PREFIX_TAG;
@@ -32,7 +32,7 @@ public class ApplicationUtil {
         StringBuilder sb = new StringBuilder();
         sb.append(PREFIX_ROLE + application.getRole().fullRole + " ");
         sb.append(PREFIX_PHONE + application.getPhone().value + " ");
-        sb.append(PREFIX_EMAIL + application.getEmail().value + " ");
+        sb.append(PREFIX_HREMAIL + application.getHrEmail().value + " ");
         sb.append(PREFIX_COMPANY + application.getCompany().value + " ");
         application.getTags().stream().forEach(
             s -> sb.append(PREFIX_TAG + s.tagRole + " ")
@@ -47,7 +47,7 @@ public class ApplicationUtil {
         StringBuilder sb = new StringBuilder();
         descriptor.getRole().ifPresent(role -> sb.append(PREFIX_ROLE).append(role.fullRole).append(" "));
         descriptor.getPhone().ifPresent(phone -> sb.append(PREFIX_PHONE).append(phone.value).append(" "));
-        descriptor.getEmail().ifPresent(hrEmail -> sb.append(PREFIX_EMAIL).append(hrEmail.value).append(" "));
+        descriptor.getHrEmail().ifPresent(hrEmail -> sb.append(PREFIX_HREMAIL).append(hrEmail.value).append(" "));
         descriptor.getCompany().ifPresent(company -> sb.append(PREFIX_COMPANY).append(company.value).append(" "));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
