@@ -6,7 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_APPLICATIONS;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -29,77 +29,77 @@ import seedu.address.model.application.Role;
 import seedu.address.model.tag.Tag;
 
 /**
- * Edits the details of an existing person in the address book.
+ * Edits the details of an existing application in the address book.
  */
 public class EditCommand extends Command {
 
     public static final String COMMAND_WORD = "edit";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by the index number used in the displayed person list. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the application identified "
+            + "by the index number used in the displayed application list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "[" + PREFIX_NAME + "NAME] "
+            + "[" + PREFIX_NAME + "ROLE] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[" + PREFIX_ADDRESS + "COMPANY] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
-            + PREFIX_EMAIL + "johndoe@example.com";
+            + PREFIX_EMAIL + "hr@example.com";
 
-    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
+    public static final String MESSAGE_EDIT_APPLICATION_SUCCESS = "Edited Application: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_DUPLICATE_APPLICATION = "This application already exists in the address book.";
 
     private final Index index;
-    private final EditPersonDescriptor editPersonDescriptor;
+    private final EditApplicationDescriptor editApplicationDescriptor;
 
     /**
-     * @param index of the person in the filtered person list to edit
-     * @param editPersonDescriptor details to edit the person with
+     * @param index of the application in the filtered application list to edit
+     * @param editApplicationDescriptor details to edit the application with
      */
-    public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
+    public EditCommand(Index index, EditApplicationDescriptor editApplicationDescriptor) {
         requireNonNull(index);
-        requireNonNull(editPersonDescriptor);
+        requireNonNull(editApplicationDescriptor);
 
         this.index = index;
-        this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
+        this.editApplicationDescriptor = new EditApplicationDescriptor(editApplicationDescriptor);
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Application> lastShownList = model.getFilteredPersonList();
+        List<Application> lastShownList = model.getFilteredApplicationList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Application applicationToEdit = lastShownList.get(index.getZeroBased());
-        Application editedApplication = createEditedPerson(applicationToEdit, editPersonDescriptor);
+        Application editedApplication = createEditedApplication(applicationToEdit, editApplicationDescriptor);
 
-        if (!applicationToEdit.isSameApplication(editedApplication) && model.hasPerson(editedApplication)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        if (!applicationToEdit.isSameApplication(editedApplication) && model.hasApplication(editedApplication)) {
+            throw new CommandException(MESSAGE_DUPLICATE_APPLICATION);
         }
 
-        model.setPerson(applicationToEdit, editedApplication);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedApplication)));
+        model.setApplication(applicationToEdit, editedApplication);
+        model.updateFilteredApplicationList(PREDICATE_SHOW_ALL_APPLICATIONS);
+        return new CommandResult(String.format(MESSAGE_EDIT_APPLICATION_SUCCESS, Messages.format(editedApplication)));
     }
 
     /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * edited with {@code editPersonDescriptor}.
+     * Creates and returns a {@code Application} with the details of {@code applicationToEdit}
+     * edited with {@code editApplicationDescriptor}.
      */
-    private static Application createEditedPerson(Application applicationToEdit, EditPersonDescriptor editPersonDescriptor) {
+    private static Application createEditedApplication(Application applicationToEdit, EditApplicationDescriptor editApplicationDescriptor) {
         assert applicationToEdit != null;
 
-        Role updatedRole = editPersonDescriptor.getName().orElse(applicationToEdit.getName());
-        Phone updatedPhone = editPersonDescriptor.getPhone().orElse(applicationToEdit.getPhone());
-        HrEmail updatedHrEmail = editPersonDescriptor.getEmail().orElse(applicationToEdit.getEmail());
-        Company updatedCompany = editPersonDescriptor.getAddress().orElse(applicationToEdit.getAddress());
-        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(applicationToEdit.getTags());
+        Role updatedRole = editApplicationDescriptor.getRole().orElse(applicationToEdit.getRole());
+        Phone updatedPhone = editApplicationDescriptor.getPhone().orElse(applicationToEdit.getPhone());
+        HrEmail updatedHrEmail = editApplicationDescriptor.getHrEmail().orElse(applicationToEdit.getHrEmail());
+        Company updatedCompany = editApplicationDescriptor.getCompany().orElse(applicationToEdit.getCompany());
+        Set<Tag> updatedTags = editApplicationDescriptor.getTags().orElse(applicationToEdit.getTags());
 
         return new Application(updatedRole, updatedPhone, updatedHrEmail, updatedCompany, updatedTags);
     }
@@ -110,46 +110,45 @@ public class EditCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof EditCommand)) {
             return false;
         }
 
         EditCommand otherEditCommand = (EditCommand) other;
         return index.equals(otherEditCommand.index)
-                && editPersonDescriptor.equals(otherEditCommand.editPersonDescriptor);
+                && editApplicationDescriptor.equals(otherEditCommand.editApplicationDescriptor);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("index", index)
-                .add("editPersonDescriptor", editPersonDescriptor)
+                .add("editApplicationDescriptor", editApplicationDescriptor)
                 .toString();
     }
 
     /**
-     * Stores the details to edit the person with. Each non-empty field value will replace the
-     * corresponding field value of the person.
+     * Stores the details to edit the application with. Each non-empty field value will replace the
+     * corresponding field value of the application.
      */
-    public static class EditPersonDescriptor {
+    public static class EditApplicationDescriptor {
         private Role role;
         private Phone phone;
         private HrEmail hrEmail;
         private Company company;
         private Set<Tag> tags;
 
-        public EditPersonDescriptor() {}
+        public EditApplicationDescriptor() {}
 
         /**
          * Copy constructor.
          * A defensive copy of {@code tags} is used internally.
          */
-        public EditPersonDescriptor(EditPersonDescriptor toCopy) {
-            setName(toCopy.role);
+        public EditApplicationDescriptor(EditApplicationDescriptor toCopy) {
+            setRole(toCopy.role);
             setPhone(toCopy.phone);
-            setEmail(toCopy.hrEmail);
-            setAddress(toCopy.company);
+            setHrEmail(toCopy.hrEmail);
+            setCompany(toCopy.company);
             setTags(toCopy.tags);
         }
 
@@ -160,11 +159,11 @@ public class EditCommand extends Command {
             return CollectionUtil.isAnyNonNull(role, phone, hrEmail, company, tags);
         }
 
-        public void setName(Role role) {
+        public void setRole(Role role) {
             this.role = role;
         }
 
-        public Optional<Role> getName() {
+        public Optional<Role> getRole() {
             return Optional.ofNullable(role);
         }
 
@@ -176,19 +175,19 @@ public class EditCommand extends Command {
             return Optional.ofNullable(phone);
         }
 
-        public void setEmail(HrEmail hrEmail) {
+        public void setHrEmail(HrEmail hrEmail) {
             this.hrEmail = hrEmail;
         }
 
-        public Optional<HrEmail> getEmail() {
+        public Optional<HrEmail> getHrEmail() {
             return Optional.ofNullable(hrEmail);
         }
 
-        public void setAddress(Company company) {
+        public void setCompany(Company company) {
             this.company = company;
         }
 
-        public Optional<Company> getAddress() {
+        public Optional<Company> getCompany() {
             return Optional.ofNullable(company);
         }
 
@@ -215,26 +214,25 @@ public class EditCommand extends Command {
                 return true;
             }
 
-            // instanceof handles nulls
-            if (!(other instanceof EditPersonDescriptor)) {
+            if (!(other instanceof EditApplicationDescriptor)) {
                 return false;
             }
 
-            EditPersonDescriptor otherEditPersonDescriptor = (EditPersonDescriptor) other;
-            return Objects.equals(role, otherEditPersonDescriptor.role)
-                    && Objects.equals(phone, otherEditPersonDescriptor.phone)
-                    && Objects.equals(hrEmail, otherEditPersonDescriptor.hrEmail)
-                    && Objects.equals(company, otherEditPersonDescriptor.company)
-                    && Objects.equals(tags, otherEditPersonDescriptor.tags);
+            EditApplicationDescriptor otherEditApplicationDescriptor = (EditApplicationDescriptor) other;
+            return Objects.equals(role, otherEditApplicationDescriptor.role)
+                    && Objects.equals(phone, otherEditApplicationDescriptor.phone)
+                    && Objects.equals(hrEmail, otherEditApplicationDescriptor.hrEmail)
+                    && Objects.equals(company, otherEditApplicationDescriptor.company)
+                    && Objects.equals(tags, otherEditApplicationDescriptor.tags);
         }
 
         @Override
         public String toString() {
             return new ToStringBuilder(this)
-                    .add("name", role)
+                    .add("role", role)
                     .add("phone", phone)
-                    .add("email", hrEmail)
-                    .add("address", company)
+                    .add("hrEmail", hrEmail)
+                    .add("company", company)
                     .add("tags", tags)
                     .toString();
         }
