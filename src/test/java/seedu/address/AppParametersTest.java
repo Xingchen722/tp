@@ -21,20 +21,20 @@ public class AppParametersTest {
 
     @Test
     public void parse_validConfigPath_success() {
-        parametersStub.roledParameters.put("config", "config.json");
+        parametersStub.namedParameters.put("config", "config.json");
         expected.setConfigPath(Paths.get("config.json"));
         assertEquals(expected, AppParameters.parse(parametersStub));
     }
 
     @Test
     public void parse_nullConfigPath_success() {
-        parametersStub.roledParameters.put("config", null);
+        parametersStub.namedParameters.put("config", null);
         assertEquals(expected, AppParameters.parse(parametersStub));
     }
 
     @Test
     public void parse_invalidConfigPath_success() {
-        parametersStub.roledParameters.put("config", "a\0");
+        parametersStub.namedParameters.put("config", "a\0");
         expected.setConfigPath(null);
         assertEquals(expected, AppParameters.parse(parametersStub));
     }
@@ -69,7 +69,7 @@ public class AppParametersTest {
     }
 
     private static class ParametersStub extends Application.Parameters {
-        private Map<String, String> roledParameters = new HashMap<>();
+        private Map<String, String> namedParameters = new HashMap<>();
 
         @Override
         public List<String> getRaw() {
@@ -77,13 +77,13 @@ public class AppParametersTest {
         }
 
         @Override
-        public List<String> getUnroled() {
+        public List<String> getUnnamed() {
             throw new AssertionError("should not be called");
         }
 
         @Override
-        public Map<String, String> getRoled() {
-            return Collections.unmodifiableMap(roledParameters);
+        public Map<String, String> getNamed() {
+            return Collections.unmodifiableMap(namedParameters);
         }
     }
 }
