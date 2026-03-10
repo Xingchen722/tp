@@ -10,9 +10,9 @@ import javafx.scene.layout.Region;
 import seedu.address.model.application.Application;
 
 /**
- * An UI component that displays information of a {@code Person}.
+ * An UI component that displays information of a {@code Application}.
  */
-public class PersonCard extends UiPart<Region> {
+public class ApplicationCard extends UiPart<Region> {
 
     private static final String FXML = "PersonListCard.fxml";
 
@@ -42,16 +42,16 @@ public class PersonCard extends UiPart<Region> {
     private FlowPane tags;
 
     /**
-     * Creates a {@code PersonCode} with the given {@code Person} and index to display.
+     * Creates a {@code ApplicationCard} with the given {@code Application} and index to display.
      */
-    public PersonCard(Application application, int displayedIndex) {
+    public ApplicationCard(Application application, int displayedIndex) {
         super(FXML);
         this.application = application;
         id.setText(displayedIndex + ". ");
-        name.setText(application.getName().fullName);
+        name.setText(application.getRole().roleName);
         phone.setText(application.getPhone().value);
-        address.setText(application.getAddress().value);
-        email.setText(application.getEmail().value);
+        address.setText(application.getCompany().companyName);
+        email.setText(application.getHrEmail().value);
         application.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
