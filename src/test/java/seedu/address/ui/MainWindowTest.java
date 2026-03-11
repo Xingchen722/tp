@@ -1,6 +1,7 @@
 package seedu.address.ui;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 import java.util.concurrent.CountDownLatch;
@@ -32,11 +33,11 @@ public class MainWindowTest {
         } catch (IllegalStateException e) {
             latch.countDown();
         }
-        latch.await(5, TimeUnit.SECONDS);
+        assertTrue(latch.await(5, TimeUnit.SECONDS));
     }
 
     @Test
-    public void fillInnerParts_initializesPersonListPanel() throws Exception {
+    public void fillInnerParts_initializesListPanel() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<MainWindow> mainWindowRef = new AtomicReference<>();
 
@@ -51,8 +52,7 @@ public class MainWindowTest {
             }
         });
 
-        latch.await(5, TimeUnit.SECONDS);
-
+        assertTrue(latch.await(5, TimeUnit.SECONDS));
         assertNotNull(mainWindowRef.get());
         assertNotNull(mainWindowRef.get().getPersonListPanel());
     }
