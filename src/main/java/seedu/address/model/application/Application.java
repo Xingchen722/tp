@@ -102,8 +102,8 @@ public class Application {
     }
 
     /**
-     * Returns true if both persons have the same identity and data fields.
-     * This defines a stronger notion of equality between two persons.
+     * Returns true if both applications have the same identity and data fields.
+     * This defines a stronger notion of equality between two applications.
      */
     @Override
     public boolean equals(Object other) {

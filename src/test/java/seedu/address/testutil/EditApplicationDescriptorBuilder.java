@@ -69,7 +69,7 @@ public class EditApplicationDescriptorBuilder {
      * Sets the {@code CompanyName} of the {@code EditApplicationDescriptor} that we are building.
      */
     public EditApplicationDescriptorBuilder withCompanyName(String companyName) {
-        descriptor.setCompanyName(companyName); // 确保调用的是你之前在 EditCommand 里写的 setter
+        descriptor.setCompanyName(companyName);
         return this;
     }
 
