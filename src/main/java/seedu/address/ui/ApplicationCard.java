@@ -12,8 +12,7 @@ import seedu.address.model.application.Application;
 /**
  * An UI component that displays information of a {@code Application}.
  */
-public class
-ApplicationCard extends UiPart<Region> {
+public class ApplicationCard extends UiPart<Region> {
 
     private static final String FXML = "ApplicationListCard.fxml";
 
