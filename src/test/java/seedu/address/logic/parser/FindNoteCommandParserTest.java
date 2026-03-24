@@ -1,7 +1,7 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.Arrays;
@@ -19,8 +19,8 @@ public class FindNoteCommandParserTest {
     @Test
     public void parse_emptyArg_throwsParseException() {
         assertThrows(ParseException.class,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindNoteCommand.MESSAGE_USAGE),
-                () -> parser.parse("   "));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindNoteCommand.MESSAGE_USAGE), ()
+                        -> parser.parse("   "));
     }
 
     @Test
