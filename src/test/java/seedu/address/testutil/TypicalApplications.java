@@ -47,8 +47,8 @@ public class TypicalApplications {
             .withDeadline("") // empty deadline
             .withNote("") // empty note
             .withStatus(Status.REJECTED)
-            .withCompanyName("Grab").
-            withCompanyLocation("Singapore").build();
+            .withCompanyName("Grab")
+            .withCompanyLocation("Singapore").build();
     public static final Application MICROSOFT_DE = new ApplicationBuilder().withRole("DevOps Engineer")
             .withPhone("9482442").withHrEmail("anna@example.com")
             .withCompanyName("Microsoft").withCompanyLocation("Redmond").build();

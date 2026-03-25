@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.testutil.Assert.assertThrows;
-import static seedu.address.testutil.TypicalApplications.GOOGLE_SWE;
 import static seedu.address.testutil.TypicalApplications.BOB;
+import static seedu.address.testutil.TypicalApplications.GOOGLE_SWE;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,7 +71,8 @@ public class UniqueApplicationListTest {
 
     @Test
     public void setApplication_targetApplicationNotInList_throwsApplicationNotFoundException() {
-        assertThrows(ApplicationNotFoundException.class, () -> uniqueApplicationList.setApplication(GOOGLE_SWE, GOOGLE_SWE));
+        assertThrows(ApplicationNotFoundException.class, () -> uniqueApplicationList
+                .setApplication(GOOGLE_SWE, GOOGLE_SWE));
     }
 
     @Test

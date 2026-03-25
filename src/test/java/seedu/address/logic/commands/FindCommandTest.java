@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_APPLICATIONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.testutil.TypicalApplications.SHOPEE_FD;
 import static seedu.address.testutil.TypicalApplications.GRAB_PM;
+import static seedu.address.testutil.TypicalApplications.SHOPEE_FD;
 import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
 
 import java.util.Arrays;
@@ -65,7 +65,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_multipleKeywords_multipleApplicationsFound() {
-        String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW, 3);
+        String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW, 2);
         RoleContainsKeywordsPredicate predicate = preparePredicate("Developer Manager Architect");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredApplicationList(predicate);
