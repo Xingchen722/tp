@@ -106,7 +106,6 @@ public class Application {
     public ApplicationEvent getApplicationEvent() {
         return applicationEvent;
     }
-    
     public Note getNote() {
         return note;
     }
