@@ -181,6 +181,56 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd application in the displayed list.
 * `find engineer` followed by `delete 1` deletes the 1st application in the results of the `find` command.
 
+### Identifying urgent applications : `reminder`
+
+Identifies and highlights applications that are nearing their deadlines.
+
+Format: `reminder`
+
+* The application list will be sorted by deadline in ascending order (nearest first).
+* Applications with the nearest deadlines appear at the top, and those without a deadline are placed at the bottom.
+* Applications with a deadline within the next three days (including today) will be automatically marked with a red `Urgent` tag in the UI.
+
+### Sorting applications : `sort`
+
+Sorts the current list of applications based on a specified criterion.
+
+Format: `sort [CRITERION]`
+
+* The `CRITERION` must be either `time` or `alphabet`.
+* `sort time`: Sorts applications by their deadline (nearest first). Applications without deadlines are placed at the bottom.
+* `sort alphabet`: Sorts applications alphabetically by their role name (A-Z).
+
+Examples:
+* `sort time`
+* `sort alphabet`
+
+### Undoing previous commands : `undo`
+
+Undoes the most recent command that modified the application list.
+
+Format: `undo`
+
+* Keeps track of up to 10 steps of your command history.
+* Commands that can be undone include add, delete, edit, clear, status, reminder, deadline, sort, and assessment.
+* You cannot undo if there are no more states to revert to in the history.
+
+Examples:
+* `delete 1` followed by `undo` restores the deleted application.
+
+### Redoing undone commands : `redo`
+
+Reverses the most recent `undo` command.
+
+Format: redo
+
+* You must perform at least one `undo` command before you can use `redo`.
+* If you attempt to redo when no undoable state exists, an error message "No undoable state to redo. Please perform an undo first." will be shown.
+* If you execute a data-modifying command (e.g.,`add`) after an undo, the `redo` **history** is cleared.
+
+Examples:
+* clear followed by `undo` (restores data), then `redo` (clears data again).
+ 
 ### Clearing all entries : `clear`
 
 Clears all application records from Hired!.
@@ -238,4 +288,8 @@ Action | Format, Examples
 **Find Note** | `findnote KEYWORD [MORE_KEYWORDS]`<br> e.g. `findnote recruiter follow`
 **List** | `list`
 **Status** | `status INDEX s/STATUS` <br> e.g. `status 2 s/offered`
+**Reminder** | `reminder` <br> Highlights applications nearing deadlines and sorts by urgency (nearest first). Applications within 3 days are marked as Urgent.
+**Sort** | `sort [CRITERION]` <br> CRITERION: `time` or `alphabet` <br> e.g. `sort time`, `sort alphabet`
+**Undo** | `undo` <br> Reverts the most recent data-modifying command (up to 10 steps).
+**Redo** | `redo` <br> Reapplies the most recently undone command.
 **Help** | `help`
