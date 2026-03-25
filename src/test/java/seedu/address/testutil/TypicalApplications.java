@@ -29,7 +29,7 @@ public class TypicalApplications {
     public static final Application GOOGLE_SWE = new ApplicationBuilder().withRole("Software Engineer")
             .withCompanyName("Google").withCompanyLocation("Singapore")
             .withHrEmail("alice@example.com").withPhone("94351253")
-            .withTags("friends").build();
+            .withTags("friends").withNote("with mentorship").build();
     public static final Application META_DA = new ApplicationBuilder().withRole("Data Analyst")
             .withCompanyName("Meta").withCompanyLocation("Menlo Park")
             .withHrEmail("johnd@example.com").withPhone("98765432")
