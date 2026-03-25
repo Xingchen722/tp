@@ -54,17 +54,13 @@ public class Application {
     }
 
     /**
-     * Constructs a new Application with status APPLIED set as default if status is not specified
+     * Constructs a new Application with status APPLIED, empty deadline, and empty note by default.
      *
      * @param role
      * @param phone
      * @param hrEmail
      * @param company
      * @param tags
-    }
-
-    /**
-     * Constructs a new Application with status APPLIED, empty deadline, and empty note by default.
      */
     public Application(Role role, Phone phone, HrEmail hrEmail, Company company, Set<Tag> tags) {
         requireAllNonNull(role, phone, hrEmail, company, tags);
