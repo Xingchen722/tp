@@ -67,7 +67,7 @@ class JsonAdaptedApplication {
                                   @JsonProperty("eventTime") String eventTime,
                                   @JsonProperty("assessmentPlatform") String assessmentPlatform,
                                   @JsonProperty("assessmentLink") String assessmentLink,
-                                  @JsonProperty("assessmentNotes") String assessmentNotes) {
+                                  @JsonProperty("assessmentNotes") String assessmentNotes),
                                   @JsonProperty("note") String note) {
         this.role = role;
         this.phone = phone;
