@@ -7,6 +7,7 @@ import seedu.address.model.application.Application;
 import seedu.address.model.application.ApplicationEvent;
 import seedu.address.model.application.Deadline;
 import seedu.address.model.application.HrEmail;
+import seedu.address.model.application.Note;
 import seedu.address.model.application.Phone;
 import seedu.address.model.application.Role;
 import seedu.address.model.application.Status;
@@ -24,6 +25,7 @@ public class ApplicationBuilder {
     public static final String DEFAULT_COMPANY_NAME = "Google";
     public static final String DEFAULT_COMPANY_LOCATION = "Singapore";
     public static final Status DEFAULT_STATUS = Status.APPLIED;
+    public static final String DEFAULT_NOTE = "";
 
     private Role role;
     private Phone phone;
@@ -34,6 +36,7 @@ public class ApplicationBuilder {
     private Status status;
     private Deadline deadline;
     private ApplicationEvent applicationEvent;
+    private Note note;
 
     /**
      * Creates a {@code ApplicationBuilder} with the default details.
@@ -48,6 +51,7 @@ public class ApplicationBuilder {
         status = DEFAULT_STATUS;
         deadline = Deadline.getEmptyDeadline();
         applicationEvent = null;
+        note = new Note(DEFAULT_NOTE);
     }
 
     /**
@@ -63,6 +67,7 @@ public class ApplicationBuilder {
         status = applicationToCopy.getStatus();
         deadline = applicationToCopy.getDeadline();
         applicationEvent = applicationToCopy.getApplicationEvent();
+        note = applicationToCopy.getNote();
     }
 
     /**
@@ -144,6 +149,13 @@ public class ApplicationBuilder {
      */
     public ApplicationBuilder withApplicationEvent(ApplicationEvent validEvent) {
         this.applicationEvent = validEvent;
+      return this;
+    }
+    /**
+     * Sets the {@code Note} of the {@code Application} that we are building.
+     */
+    public ApplicationBuilder withNote(String note) {
+        this.note = new Note(note);
         return this;
     }
 
@@ -153,6 +165,6 @@ public class ApplicationBuilder {
     public Application build() {
         seedu.address.model.application.Company company =
                 new seedu.address.model.application.Company(companyName, companyLocation);
-        return new Application(role, phone, hrEmail, company, tags, status, deadline, null);
+        return new Application(role, phone, hrEmail, company, tags, status, deadline, null, note);
     }
 }

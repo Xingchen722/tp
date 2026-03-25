@@ -47,6 +47,10 @@ public class Messages {
                 .append(application.getCompany())
                 .append("; Status: ")
                 .append(application.getStatus())
+                .append("; Deadline: ")
+                .append(application.getDeadline())
+                .append("; Note: ")
+                .append(application.getNote())
                 .append("; Tags: ");
         application.getTags().forEach(builder::append);
         return builder.toString();

@@ -67,6 +67,7 @@ public class StatusCommand extends Command {
                 status,
                 applicationToEdit.getDeadline(),
                 applicationToEdit.getApplicationEvent()
+                applicationToEdit.getNote()
         );
 
         model.setApplication(applicationToEdit, updatedApplication);

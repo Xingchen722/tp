@@ -25,21 +25,23 @@ public class Application {
     private final Company company;
     private final Set<Tag> tags = new HashSet<>();
 
-    //Status field
+    // Status field
     private final Status status;
 
-    //Deadline filed
+    // Deadline field
     private final Deadline deadline;
 
     //ApplicationEvent fields
     private final ApplicationEvent applicationEvent;
+    // Note field
+    private final Note note;
 
     /**
      * Every field must be present and not null.
      */
     public Application(Role role, Phone phone, HrEmail hrEmail, Company company, Set<Tag> tags,
-                       Status status, Deadline deadline, ApplicationEvent applicationEvent) {
-        requireAllNonNull(role, phone, hrEmail, company, tags, status, deadline);
+                       Status status, Deadline deadline, ApplicationEvent applicationEvent, Note note) {
+        requireAllNonNull(role, phone, hrEmail, company, tags, status, deadline, note);
         this.role = role;
         this.phone = phone;
         this.hrEmail = hrEmail;
@@ -48,6 +50,7 @@ public class Application {
         this.status = status;
         this.deadline = deadline;
         this.applicationEvent = applicationEvent;
+        this.note = note;
     }
 
     /**
@@ -57,7 +60,11 @@ public class Application {
      * @param phone
      * @param hrEmail
      * @param company
-     * @param tags
+     * @param tags  
+    }
+
+    /**
+     * Constructs a new Application with status APPLIED, empty deadline, and empty note by default.
      */
     public Application(Role role, Phone phone, HrEmail hrEmail, Company company, Set<Tag> tags) {
         requireAllNonNull(role, phone, hrEmail, company, tags);
@@ -69,6 +76,7 @@ public class Application {
         this.status = Status.APPLIED;
         this.deadline = Deadline.getEmptyDeadline();
         this.applicationEvent = null;
+        this.note = new Note("");
     }
 
     public Role getRole() {
@@ -97,6 +105,8 @@ public class Application {
 
     public ApplicationEvent getApplicationEvent() {
         return applicationEvent;
+    public Note getNote() {
+        return note;
     }
 
     /**
@@ -142,13 +152,13 @@ public class Application {
                 && company.equals(otherApplication.company)
                 && tags.equals(otherApplication.tags)
                 && status.equals(otherApplication.status)
-                && deadline.equals(otherApplication.deadline);
+                && deadline.equals(otherApplication.deadline)
+                && note.equals(otherApplication.note);
     }
 
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(role, phone, hrEmail, company, tags, status, deadline);
+        return Objects.hash(role, phone, hrEmail, company, tags, status, deadline, note);
     }
 
     @Override
@@ -161,6 +171,7 @@ public class Application {
                 .add("tags", tags)
                 .add("status", status)
                 .add("deadline", deadline)
+                .add("note", note)
                 .toString();
     }
 }

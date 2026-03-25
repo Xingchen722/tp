@@ -20,6 +20,7 @@ import seedu.address.model.application.Company;
 import seedu.address.model.application.Deadline;
 import seedu.address.model.application.HrEmail;
 import seedu.address.model.application.OnlineAssessment;
+import seedu.address.model.application.Note;
 import seedu.address.model.application.Phone;
 import seedu.address.model.application.Role;
 import seedu.address.model.application.Status;
@@ -48,6 +49,7 @@ class JsonAdaptedApplication {
     private final String assessmentPlatform;
     private final String assessmentLink;
     private final String assessmentNotes;
+    private final String note;
 
     /**
      * Constructs a {@code JsonAdaptedApplication} with the given application details.
@@ -66,6 +68,7 @@ class JsonAdaptedApplication {
                                   @JsonProperty("assessmentPlatform") String assessmentPlatform,
                                   @JsonProperty("assessmentLink") String assessmentLink,
                                   @JsonProperty("assessmentNotes") String assessmentNotes) {
+                                  @JsonProperty("note") String note) {
         this.role = role;
         this.phone = phone;
         this.hrEmail = hrEmail;
@@ -81,6 +84,7 @@ class JsonAdaptedApplication {
         this.assessmentPlatform = assessmentPlatform;
         this.assessmentLink = assessmentLink;
         this.assessmentNotes = assessmentNotes;
+        this.note = note;
     }
 
     /**
@@ -115,6 +119,7 @@ class JsonAdaptedApplication {
             this.assessmentLink = null;
             this.assessmentNotes = null;
         }
+        this.note = source.getNote().value;
     }
 
     /**
@@ -194,8 +199,9 @@ class JsonAdaptedApplication {
                     : new OnlineAssessment(eventLocation, modelDateTime, assessmentPlatform, assessmentLink);
         }
 
+        final Note modelNote = new Note(note != null ? note : "");
 
         return new Application(modelRole, modelPhone, modelHrEmail, modelCompany,
-                modelTags, modelStatus, modelDeadline, modelEvent);
+                modelTags, modelStatus, modelDeadline, modelEvent, modelNote);
     }
 }
