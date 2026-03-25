@@ -252,7 +252,7 @@ public class ApplicationCardTest {
 
         // 4. 验证是否应用了红色背景样式
         String style = urgentLabel.getStyle();
-        assertTrue(style.contains("-fx-background-color: #FF0000"),
+        assertTrue(style.contains("-fx-background-color: #ae3535"),
                 "Urgent tag should be red. Current style: " + style);
     }
 
@@ -272,32 +272,61 @@ public class ApplicationCardTest {
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Uppercase urgent tag label not found"));
 
-        assertTrue(urgentLabel.getStyle().contains("#FF0000"));
+        assertTrue(urgentLabel.getStyle().contains("#ae3535"));
         assertTrue(tagsPane.getChildren().stream()
                 .map(node -> (Label) node)
                 .anyMatch(label -> label.getText().equals("applied")));
     }
 
     @Test
-    public void constructor_afterRedoState_displaysUpdatedInfo() throws Exception {
-        // 模拟 Redo 执行后，数据被恢复到之前的状态 (例如 Deadline 和 Status 发生了变化)
-        Application redoStateApp = new ApplicationBuilder()
-                .withRole("Cloud Engineer")
-                .withStatus(Status.OFFERED)
-                .withDeadline("2026-05-20")
-                .build();
+    public void constructor_statusApplied_hasAppliedStyleClass() throws Exception {
+        Application application = new ApplicationBuilder().withStatus(Status.APPLIED).build();
+        ApplicationCard applicationCard = new ApplicationCard(application, 1);
 
-        ApplicationCard applicationCard = new ApplicationCard(redoStateApp, 2);
+        Label statusTag = getStatusTag(applicationCard, "applied");
+        // 验证是否成功添加了对应的 CSS 类名
+        assertTrue(statusTag.getStyleClass().contains("status-applied"),
+                "Status tag should have 'status-applied' CSS class");
+    }
 
-        // 验证 UI 是否正确展示了恢复后的数据
-        assertEquals("2. ", getLabelText(applicationCard, "id"));
-        assertEquals("Deadline: 2026-05-20", getLabelText(applicationCard, "deadline"));
+    @Test
+    public void constructor_statusOffered_hasOfferedStyleClass() throws Exception {
+        Application application = new ApplicationBuilder().withStatus(Status.OFFERED).build();
+        ApplicationCard applicationCard = new ApplicationCard(application, 1);
 
-        // 验证 Status 标签是否正确渲染为小写
-        FlowPane tagsPane = getTagsPane(applicationCard);
-        assertTrue(tagsPane.getChildren().stream()
-                .map(node -> (Label) node)
-                .anyMatch(label -> label.getText().equals("offered")));
+        Label statusTag = getStatusTag(applicationCard, "offered");
+        assertTrue(statusTag.getStyleClass().contains("status-offered"),
+                "Status tag should have 'status-offered' CSS class");
+    }
+
+    @Test
+    public void constructor_statusRejected_hasRejectedStyleClass() throws Exception {
+        Application application = new ApplicationBuilder().withStatus(Status.REJECTED).build();
+        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+
+        Label statusTag = getStatusTag(applicationCard, "rejected");
+        assertTrue(statusTag.getStyleClass().contains("status-rejected"),
+                "Status tag should have 'status-rejected' CSS class");
+    }
+
+    @Test
+    public void constructor_statusInterviewing_hasInterviewingStyleClass() throws Exception {
+        Application application = new ApplicationBuilder().withStatus(Status.INTERVIEWING).build();
+        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+
+        Label statusTag = getStatusTag(applicationCard, "interviewing");
+        assertTrue(statusTag.getStyleClass().contains("status-interviewing"),
+                "Status tag should have 'status-interviewing' CSS class");
+    }
+
+    @Test
+    public void constructor_statusWithdrawn_hasWithdrawnStyleClass() throws Exception {
+        Application application = new ApplicationBuilder().withStatus(Status.WITHDRAWN).build();
+        ApplicationCard applicationCard = new ApplicationCard(application, 1);
+
+        Label statusTag = getStatusTag(applicationCard, "withdrawn");
+        assertTrue(statusTag.getStyleClass().contains("status-withdrawn"),
+                "Status tag should have 'status-withdrawn' CSS class");
     }
 
     private String getLabelText(ApplicationCard card, String fieldName) throws Exception {
@@ -318,4 +347,19 @@ public class ApplicationCardTest {
         field.setAccessible(true);
         return (FlowPane) field.get(card);
     }
+
+    /**
+     * 辅助方法：从 tags 容器中找到对应的 status tag。
+     */
+    private Label getStatusTag(ApplicationCard card, String statusText) throws Exception {
+        FlowPane tagsPane = getTagsPane(card);
+        return (Label) tagsPane.getChildren().stream()
+                .filter(node -> node instanceof Label)
+                .map(node -> (Label) node)
+                .filter(label -> label.getText().equals(statusText))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Status tag not found: " + statusText));
+    }
+
+
 }
