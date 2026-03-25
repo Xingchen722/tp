@@ -90,7 +90,8 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
 
         if (argMultimap.getValue(PREFIX_NOTE).isPresent()) {
-            editApplicationDescriptor.setNote(new Note(argMultimap.getValue(PREFIX_NOTE).get()));
+            editApplicationDescriptor.setNote(
+                    ParserUtil.parseNote(argMultimap.getValue(PREFIX_NOTE).get()));
         }
 
         if (!editApplicationDescriptor.isAnyFieldEdited()) {

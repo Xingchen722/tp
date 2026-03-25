@@ -6,26 +6,19 @@ import static java.util.Objects.requireNonNull;
  * Represents a Note in an Application.
  */
 public class Note {
+    public static final int MAX_LENGTH = 1000;
     public static final String MESSAGE_CONSTRAINTS =
-            "Note can be empty and can contain any text.";
+            "Notes can take any values, but should not be completely blank or exceed " + MAX_LENGTH + " characters.";
 
     public final String value;
 
-    /**
-     * Constructs a {@code Note}.
-     *
-     * @param value A valid note.
-     */
     public Note(String value) {
         requireNonNull(value);
         this.value = value;
     }
 
-    /**
-     * Returns true if a given string is a valid note.
-     */
     public static boolean isValidNote(String test) {
-        return test != null;
+        return test.length() <= MAX_LENGTH;
     }
 
     @Override
