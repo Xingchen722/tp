@@ -34,12 +34,11 @@ create DeleteCommand
 DeleteCommandParser -> DeleteCommand
 activate DeleteCommand
 
-DeleteCommand --> DeleteCommandParser :
+DeleteCommand --> DeleteCommandParser
 deactivate DeleteCommand
 
 DeleteCommandParser --> AddressBookParser : d
 deactivate DeleteCommandParser
-'Hidden arrow to position the destroy marker below the end of the activation bar.
 DeleteCommandParser -[hidden]-> AddressBookParser
 destroy DeleteCommandParser
 
@@ -51,21 +50,18 @@ activate DeleteCommand
 
 DeleteCommand -> Model : getFilteredApplicationList()
 activate Model
-
 Model --> DeleteCommand : lastShownList
 deactivate Model
 
-DeleteCommand -> DeleteCommand : applicationToDelete = lastShownList.get(index)
+DeleteCommand -> DeleteCommand : get applicationToDelete from lastShownList
 
 DeleteCommand -> Model : deleteApplication(applicationToDelete)
 activate Model
-
 Model --> DeleteCommand
 deactivate Model
 
 DeleteCommand -> Model : commitAddressBook()
 activate Model
-
 Model --> DeleteCommand
 deactivate Model
 
