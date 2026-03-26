@@ -4,57 +4,60 @@ skinparam arrowThickness 1.1
 skinparam arrowColor UI_COLOR_T4
 skinparam classBackgroundColor UI_COLOR
 
-package UI <<Rectangle>>{
-Class "<<interface>>\nUi" as Ui
-Class "{abstract}\nUiPart" as UiPart
-Class UiManager
-Class MainWindow
-Class HelpWindow
-Class ResultDisplay
-Class PersonListPanel
-Class PersonCard
-Class StatusBarFooter
-Class CommandBox
+package UI <<Rectangle>> {
+  interface "Ui" as Ui
+  abstract class "UiPart<T>" as UiPart
+  class UiManager
+  class MainWindow
+  class HelpWindow
+  class ResultDisplay
+  class ApplicationListPanel
+  class ApplicationCard
+  class StatusBarFooter
+  class CommandBox
+  interface "CommandExecutor" as CommandExecutor <<functional interface>>
 }
 
 package Model <<Rectangle>> {
-Class HiddenModel #FFFFFF
+  class "Application" as Application MODEL_COLOR
 }
 
 package Logic <<Rectangle>> {
-Class HiddenLogic #FFFFFF
+  interface "Logic" as Logic LOGIC_COLOR
 }
 
-Class HiddenOutside #FFFFFF
-HiddenOutside ..> Ui
+class MainApp #FFFFFF
 
-UiManager .left.|> Ui
-UiManager -down-> "1" MainWindow
-MainWindow *-down->  "1" CommandBox
-MainWindow *-down-> "1" ResultDisplay
-MainWindow *-down-> "1" PersonListPanel
-MainWindow *-down-> "1" StatusBarFooter
-MainWindow --> "0..1" HelpWindow
+MainApp ..> Ui
 
-PersonListPanel -down-> "*" PersonCard
+UiManager ..|> Ui
+UiManager *--> "1" MainWindow
 
-MainWindow -left-|> UiPart
+MainWindow --> Logic
+UiManager --> Logic
 
+MainWindow --|> UiPart
 ResultDisplay --|> UiPart
 CommandBox --|> UiPart
-PersonListPanel --|> UiPart
-PersonCard --|> UiPart
+ApplicationListPanel --|> UiPart
+ApplicationCard --|> UiPart
 StatusBarFooter --|> UiPart
 HelpWindow --|> UiPart
 
-PersonCard ..> Model
-UiManager -right-> Logic
-MainWindow -left-> Logic
+MainWindow *--> "1" CommandBox
+MainWindow *--> "1" ResultDisplay
+MainWindow *--> "1" ApplicationListPanel
+MainWindow *--> "1" StatusBarFooter
+MainWindow ..> HelpWindow
 
-PersonListPanel -[hidden]left- HelpWindow
+ApplicationListPanel *--> "*" ApplicationCard
+
+ApplicationListPanel ..> Application
+ApplicationCard ..> Application
+CommandBox --> CommandExecutor
+
+ApplicationListPanel -[hidden]left- HelpWindow
 HelpWindow -[hidden]left- CommandBox
 CommandBox -[hidden]left- ResultDisplay
 ResultDisplay -[hidden]left- StatusBarFooter
-
-MainWindow -[hidden]-|> UiPart
 @enduml
