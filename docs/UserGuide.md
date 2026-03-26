@@ -327,5 +327,6 @@ Action | Format, Examples
 **Sort** | `sort [CRITERION]` <br> CRITERION: `time` or `alphabet` <br> e.g. `sort time`, `sort alphabet`
 **Undo** | `undo` <br> Reverts the most recent data-modifying command (up to 10 steps).
 **Redo** | `redo` <br> Reapplies the most recently undone command.
+**Resume** | `resume` <br> Attaches you resume to a specific application.
 **Exit** | `exit`
 **Help** | `help`
