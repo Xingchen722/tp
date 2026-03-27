@@ -110,4 +110,26 @@ public class ApplicationCardTest {
     public void formatResume_normalValue_returnsExpectedText() {
         assertEquals("▣ resume.pdf", ApplicationCard.formatResume("resume.pdf"));
     }
+
+    @Test
+    public void formatMethods_allReturnExpectedText() {
+        assertEquals("☎ 91234567", ApplicationCard.formatPhone("91234567"));
+        assertEquals("✉ hr@google.com", ApplicationCard.formatHrEmail("hr@google.com"));
+        assertEquals("▣ Google", ApplicationCard.formatCompanyName("Google"));
+        assertEquals("⌂ Singapore", ApplicationCard.formatCompanyLocation("Singapore"));
+        assertEquals("◷ 2026-12-31", ApplicationCard.formatDeadline("2026-12-31"));
+        assertEquals("✎ Follow up next Monday", ApplicationCard.formatNote("Follow up next Monday"));
+        assertEquals("▣ resume.pdf", ApplicationCard.formatResume("resume.pdf"));
+    }
+
+    @Test
+    public void formatMethods_emptyStrings_returnIconOnly() {
+        assertEquals("☎ ", ApplicationCard.formatPhone(""));
+        assertEquals("✉ ", ApplicationCard.formatHrEmail(""));
+        assertEquals("▣ ", ApplicationCard.formatCompanyName(""));
+        assertEquals("⌂ ", ApplicationCard.formatCompanyLocation(""));
+        assertEquals("◷ ", ApplicationCard.formatDeadline(""));
+        assertEquals("✎ ", ApplicationCard.formatNote(""));
+        assertEquals("▣ ", ApplicationCard.formatResume(""));
+    }
 }
