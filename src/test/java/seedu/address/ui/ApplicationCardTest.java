@@ -56,10 +56,10 @@ public class ApplicationCardTest {
 
         assertEquals(application, applicationCard.application);
         assertEquals("1. ", getLabelText(applicationCard, "id"));
-        assertEquals("Google", getLabelText(applicationCard, "companyName"));
+        assertEquals("▣ Google", getLabelText(applicationCard, "companyName"));
         assertEquals("Intern", getLabelText(applicationCard, "role"));
-        assertEquals("91234567", getLabelText(applicationCard, "phone"));
-        assertEquals("hr@google.com", getLabelText(applicationCard, "hrEmail"));
+        assertEquals("☎ 91234567", getLabelText(applicationCard, "phone"));
+        assertEquals("✉ hr@google.com", getLabelText(applicationCard, "hrEmail"));
         assertFalse(getLabel(applicationCard, "status").isVisible());
         assertFalse(getLabel(applicationCard, "status").isManaged());
 
@@ -88,8 +88,8 @@ public class ApplicationCardTest {
 
         ApplicationCard applicationCard = new ApplicationCard(application, 1);
 
-        assertEquals("Google", getLabelText(applicationCard, "companyName"));
-        assertEquals("Singapore", getLabelText(applicationCard, "companyLocation"));
+        assertEquals("▣ Google", getLabelText(applicationCard, "companyName"));
+        assertEquals("⌂ Singapore", getLabelText(applicationCard, "companyLocation"));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class ApplicationCardTest {
         Label deadlineLabel = getLabel(applicationCard, "deadline");
         assertTrue(deadlineLabel.isVisible());
         assertTrue(deadlineLabel.isManaged());
-        assertEquals("Deadline: " + application.getDeadline().value, getLabelText(applicationCard, "deadline"));
+        assertEquals("◷ " + application.getDeadline().value, getLabelText(applicationCard, "deadline"));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class ApplicationCardTest {
         Label noteLabel = getLabel(applicationCard, "note");
         assertTrue(noteLabel.isVisible());
         assertTrue(noteLabel.isManaged());
-        assertEquals("Note: " + application.getNote().value, getLabelText(applicationCard, "note"));
+        assertEquals("✎ " + application.getNote().value, getLabelText(applicationCard, "note"));
     }
 
     @Test
@@ -417,14 +417,14 @@ public class ApplicationCardTest {
 
         Label locLabel = getLabel(applicationCard, "companyLocation");
         assertTrue(locLabel.isVisible());
-        assertEquals("Singapore", locLabel.getText());
+        assertEquals("⌂ Singapore", locLabel.getText());
 
         Label deadlineLabel = getLabel(applicationCard, "deadline");
         assertTrue(deadlineLabel.isVisible());
-        assertEquals("Deadline: 2026-12-31", deadlineLabel.getText());
+        assertEquals("◷ 2026-12-31", deadlineLabel.getText());
 
         Label noteLabel = getLabel(applicationCard, "note");
         assertTrue(noteLabel.isVisible());
-        assertEquals("Note: Important Note", noteLabel.getText());
+        assertEquals("✎ Important Note", noteLabel.getText());
     }
 }
