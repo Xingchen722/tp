@@ -95,13 +95,13 @@ public class ApplicationCardTest {
 
     @Test
     public void formatMethods_doNotAddIconPrefix() {
-        String phone    = ApplicationCard.formatPhone("91234567");
-        String email    = ApplicationCard.formatHrEmail("hr@google.com");
-        String company  = ApplicationCard.formatCompanyName("Google");
+        String phone = ApplicationCard.formatPhone("91234567");
+        String email = ApplicationCard.formatHrEmail("hr@google.com");
+        String company = ApplicationCard.formatCompanyName("Google");
         String location = ApplicationCard.formatCompanyLocation("Singapore");
         String deadline = ApplicationCard.formatDeadline("2026-12-31");
-        String note     = ApplicationCard.formatNote("Follow up");
-        String resume   = ApplicationCard.formatResume("resume.pdf");
+        String note = ApplicationCard.formatNote("Follow up");
+        String resume = ApplicationCard.formatResume("resume.pdf");
 
         // Icons are now rendered as FontIcon nodes, not text prefixes
         assertTrue(!phone.contains("☎") && !phone.contains("✆"));
@@ -115,13 +115,13 @@ public class ApplicationCardTest {
 
     @Test
     public void formatMethods_allReturnExactInput() {
-        assertEquals("91234567",          ApplicationCard.formatPhone("91234567"));
-        assertEquals("hr@google.com",     ApplicationCard.formatHrEmail("hr@google.com"));
-        assertEquals("Google",            ApplicationCard.formatCompanyName("Google"));
-        assertEquals("Singapore",         ApplicationCard.formatCompanyLocation("Singapore"));
-        assertEquals("2026-12-31",        ApplicationCard.formatDeadline("2026-12-31"));
-        assertEquals("Follow up",         ApplicationCard.formatNote("Follow up"));
-        assertEquals("resume.pdf",        ApplicationCard.formatResume("resume.pdf"));
+        assertEquals("91234567", ApplicationCard.formatPhone("91234567"));
+        assertEquals("hr@google.com", ApplicationCard.formatHrEmail("hr@google.com"));
+        assertEquals("Google", ApplicationCard.formatCompanyName("Google"));
+        assertEquals("Singapore", ApplicationCard.formatCompanyLocation("Singapore"));
+        assertEquals("2026-12-31", ApplicationCard.formatDeadline("2026-12-31"));
+        assertEquals("Follow up", ApplicationCard.formatNote("Follow up"));
+        assertEquals("resume.pdf", ApplicationCard.formatResume("resume.pdf"));
     }
 
     @Test
