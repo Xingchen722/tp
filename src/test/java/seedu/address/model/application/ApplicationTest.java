@@ -39,6 +39,25 @@ public class ApplicationTest {
                 .build();
         assertTrue(GOOGLE_SWE.isSameApplication(editedAlice));
 
+        // same role and company name but different company location -> returns false
+        editedAlice = new ApplicationBuilder(GOOGLE_SWE)
+                .withCompanyLocation("Another Location")
+                .build();
+        assertFalse(GOOGLE_SWE.isSameApplication(editedAlice));
+
+        // one location empty and one non-empty -> returns false
+        Application withEmptyLocation = new ApplicationBuilder(GOOGLE_SWE)
+                .withCompanyLocation("")
+                .build();
+        assertFalse(GOOGLE_SWE.isSameApplication(withEmptyLocation));
+
+        // both locations empty -> returns true
+        Application bothEmptyLocation = new ApplicationBuilder(withEmptyLocation)
+                .withPhone(VALID_PHONE_BOB)
+                .withHrEmail(VALID_HREMAIL_BOB)
+                .build();
+        assertTrue(withEmptyLocation.isSameApplication(bothEmptyLocation));
+
         // different role, all other attributes same -> returns false
         editedAlice = new ApplicationBuilder(GOOGLE_SWE).withRole(VALID_ROLE_BOB).build();
         assertFalse(GOOGLE_SWE.isSameApplication(editedAlice));

@@ -144,7 +144,8 @@ public class Application {
 
         return otherApplication != null
                 && otherApplication.getRole().equals(getRole())
-                && otherApplication.getCompany().companyName.equalsIgnoreCase(getCompany().companyName);
+                && otherApplication.getCompany().companyName.equalsIgnoreCase(getCompany().companyName)
+                && otherApplication.getCompany().companyLocation.equalsIgnoreCase(getCompany().companyLocation);
     }
 
     /**

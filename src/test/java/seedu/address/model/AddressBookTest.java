@@ -82,6 +82,15 @@ public class AddressBookTest {
     }
 
     @Test
+    public void hasApplication_applicationWithDifferentLocationInAddressBook_returnsFalse() {
+        companyBook.addApplication(GOOGLE_SWE);
+        Application editedAlice = new ApplicationBuilder(GOOGLE_SWE)
+                .withCompanyLocation("Another Location")
+                .build();
+        assertFalse(companyBook.hasApplication(editedAlice));
+    }
+
+    @Test
     public void getApplicationList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> companyBook.getApplicationList().remove(0));
     }
