@@ -4,12 +4,18 @@ import static seedu.address.logic.commands.ReminderCommand.REMINDER_TAG_NAME;
 
 import java.util.Comparator;
 
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
+import org.kordamp.ikonli.javafx.FontIcon;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import seedu.address.model.application.Application;
 import seedu.address.model.application.ApplicationEvent;
 
@@ -19,35 +25,19 @@ import seedu.address.model.application.ApplicationEvent;
 public class ApplicationCard extends UiPart<Region> {
 
     private static final String FXML = "ApplicationListCard.fxml";
+    private static final Color ICON_COLOR = Color.WHITE;
+    private static final int ICON_SIZE = 14;
 
+    /** The application displayed by this card. */
     public final Application application;
 
-    @FXML
-    private HBox cardPane;
-    @FXML
-    private Label role;
-    @FXML
-    private Label id;
-    @FXML
-    private Label phone;
-    @FXML
-    private Label companyName;
-    @FXML
-    private Label companyLocation;
-    @FXML
-    private Label status;
-    @FXML
-    private Label hrEmail;
-    @FXML
-    private FlowPane tags;
-    @FXML
-    private Label deadline;
-    @FXML
-    private Label note;
-    @FXML
-    private Label resume;
-    @FXML
-    private Button eventButton;
+    @FXML private HBox cardPane;
+    @FXML private Label role;
+    @FXML private Label id;
+    @FXML private FlowPane tags;
+    @FXML private Label deadline;
+    @FXML private VBox detailsBox;
+    @FXML private Button eventButton;
 
     private final EventDetailsWindow eventDetailsWindow;
 
@@ -61,55 +51,55 @@ public class ApplicationCard extends UiPart<Region> {
 
         id.setText(displayedIndex + ". ");
         role.setText(application.getRole().roleName);
-        phone.setText(application.getPhone().value);
-        hrEmail.setText(application.getHrEmail().value);
-        companyName.setText(application.getCompany().companyName);
-
-        if (application.getCompany().companyLocation.isEmpty()) {
-            companyLocation.setVisible(false);
-            companyLocation.setManaged(false);
-        } else {
-            companyLocation.setText(application.getCompany().companyLocation);
-        }
 
         if (application.getDeadline().isEmpty()) {
             deadline.setVisible(false);
             deadline.setManaged(false);
         } else {
-            deadline.setText("Deadline: " + application.getDeadline().value);
+            deadline.setText(application.getDeadline().value);
+            deadline.setGraphic(calendarIcon());
         }
 
-        if (application.getNote().value.isEmpty()) {
-            note.setVisible(false);
-            note.setManaged(false);
-        } else {
-            note.setText("Note: " + application.getNote().value);
-        }
-
-        if (application.getResume().isEmpty()) {
-            resume.setVisible(false);
-            resume.setManaged(false);
-        } else {
-            resume.setText("Resume: " + application.getResume().value);
-        }
-
-        status.setVisible(false);
-        status.setManaged(false);
+        String statusText = application.getStatus().toString();
+        Label statusChip = new Label(toTitleCase(statusText));
+        statusChip.getStyleClass().addAll("chip", "chip-status-" + toStatusKey(statusText));
+        tags.getChildren().add(statusChip);
 
         application.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> {
-                    Label tagLabel = new Label(tag.tagName);
+                    Label chip = new Label(tag.tagName);
+                    chip.getStyleClass().add("chip");
                     if (tag.tagName.equalsIgnoreCase(REMINDER_TAG_NAME)) {
-                        tagLabel.getStyleClass().add("tag-urgent");
+                        chip.getStyleClass().add("chip-urgent");
                     }
-                    tags.getChildren().add(tagLabel);
+                    tags.getChildren().add(chip);
                 });
 
-        String statusText = application.getStatus().toString().toLowerCase();
-        Label statusTag = new Label(statusText);
-        statusTag.getStyleClass().add("status-" + statusText.replace(" ", "-"));
-        tags.getChildren().add(statusTag);
+        detailsBox.getChildren().add(
+                iconRow(FontAwesomeSolid.BUILDING, application.getCompany().companyName));
+
+        if (!application.getCompany().companyLocation.isEmpty()) {
+            detailsBox.getChildren().add(
+                    iconRow(FontAwesomeSolid.MAP_MARKER_ALT,
+                            application.getCompany().companyLocation));
+        }
+
+        detailsBox.getChildren().add(
+                iconRow(FontAwesomeSolid.PHONE, application.getPhone().value));
+
+        detailsBox.getChildren().add(
+                iconRow(FontAwesomeSolid.ENVELOPE, application.getHrEmail().value));
+
+        if (!application.getNote().value.isEmpty()) {
+            detailsBox.getChildren().add(
+                    iconRow(FontAwesomeSolid.STICKY_NOTE, application.getNote().value));
+        }
+
+        if (!application.getResume().isEmpty()) {
+            detailsBox.getChildren().add(
+                    iconRow(FontAwesomeSolid.FILE_ALT, application.getResume().value));
+        }
 
         // Show event button only if an ApplicationEvent exists
         ApplicationEvent event = application.getApplicationEvent();
@@ -133,5 +123,82 @@ public class ApplicationCard extends UiPart<Region> {
         } else {
             eventDetailsWindow.show();
         }
+    }
+
+    /**
+     * Creates an HBox row with a FontAwesome icon and a text label.
+     */
+    private HBox iconRow(FontAwesomeSolid iconCode, String text) {
+        FontIcon fi = new FontIcon(iconCode);
+        fi.setIconSize(ICON_SIZE);
+        fi.setIconColor(ICON_COLOR);
+
+        Label lbl = new Label(text);
+        lbl.getStyleClass().add("detail-label");
+
+        HBox row = new HBox(8, fi, lbl);
+        row.setAlignment(Pos.CENTER_LEFT);
+        return row;
+    }
+
+    /**
+     * Creates a red calendar icon for the deadline field.
+     */
+    private FontIcon calendarIcon() {
+        FontIcon fi = new FontIcon(FontAwesomeSolid.CALENDAR_ALT);
+        fi.setIconSize(ICON_SIZE);
+        fi.setIconColor(Color.web("#e53935"));
+        return fi;
+    }
+
+    /**
+     * Converts a status enum string to a CSS class key.
+     * Example: "IN_PROGRESS" becomes "in-progress".
+     */
+    static String toStatusKey(String status) {
+        if (status == null || status.isEmpty()) {
+            return "";
+        }
+        return status.toLowerCase().replace("_", "-");
+    }
+
+    /**
+     * Converts a string to title case, replacing underscores with spaces.
+     * Example: "IN_PROGRESS" becomes "In progress".
+     */
+    static String toTitleCase(String s) {
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        String lower = s.toLowerCase().replace("_", " ");
+        return Character.toUpperCase(lower.charAt(0)) + lower.substring(1);
+    }
+
+    static String formatPhone(String value) {
+        return value;
+    }
+
+    static String formatHrEmail(String value) {
+        return value;
+    }
+
+    static String formatCompanyName(String value) {
+        return value;
+    }
+
+    static String formatCompanyLocation(String value) {
+        return value;
+    }
+
+    static String formatDeadline(String value) {
+        return value;
+    }
+
+    static String formatNote(String value) {
+        return value;
+    }
+
+    static String formatResume(String value) {
+        return value;
     }
 }

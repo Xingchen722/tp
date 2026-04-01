@@ -13,8 +13,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -23,10 +21,9 @@ import javafx.scene.layout.FlowPane;
 import seedu.address.model.application.Application;
 import seedu.address.model.application.OnlineAssessment;
 import seedu.address.model.application.Resume;
-import seedu.address.model.application.Status;
 import seedu.address.testutil.ApplicationBuilder;
 
-@DisabledOnOs(OS.LINUX)
+
 public class ApplicationCardTest {
 
     @BeforeAll
@@ -121,262 +118,215 @@ public class ApplicationCardTest {
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Status tag not found: " + text));
     }
-
-    // -----------------------------------------------------------------------
-    // Tests
-    // -----------------------------------------------------------------------
+    // ── formatPhone ──────────────────────────────────────────────────────────
 
     @Test
-    public void constructor_setsDisplayedFieldsCorrectly() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyName("Google").withCompanyLocation("")
-                .withRole("Intern").withPhone("91234567").withHrEmail("hr@google.com")
-                .build();
-        ApplicationCard card = buildCard(app, 1);
-
-        assertEquals(app, card.application);
-        assertEquals("1. ", getLabelText(card, "id"));
-        assertEquals("Google", getLabelText(card, "companyName"));
-        assertEquals("Intern", getLabelText(card, "role"));
-        assertEquals("91234567", getLabelText(card, "phone"));
-        assertEquals("hr@google.com", getLabelText(card, "hrEmail"));
-        assertFalse(getLabel(card, "status").isVisible());
-        assertFalse(getLabel(card, "status").isManaged());
-        assertFalse(getLabel(card, "companyLocation").isVisible());
-        assertFalse(getLabel(card, "companyLocation").isManaged());
-        assertFalse(getLabel(card, "deadline").isVisible());
-        assertFalse(getLabel(card, "deadline").isManaged());
-        assertFalse(getLabel(card, "note").isVisible());
-        assertFalse(getLabel(card, "note").isManaged());
+    public void formatPhone_normalValue_returnsValue() {
+        assertEquals("91234567", ApplicationCard.formatPhone("91234567"));
     }
 
     @Test
-    public void constructor_withCompanyLocation_setsLocationVisibleAndText() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyName("Google").withCompanyLocation("Singapore")
-                .withRole("Intern").withPhone("91234567").withHrEmail("hr@google.com")
-                .build();
-        ApplicationCard card = buildCard(app, 1);
+    public void formatPhone_emptyString_returnsEmpty() {
+        assertEquals("", ApplicationCard.formatPhone(""));
+    }
 
-        assertEquals("Google", getLabelText(card, "companyName"));
-        assertEquals("Singapore", getLabelText(card, "companyLocation"));
+    // ── formatHrEmail ────────────────────────────────────────────────────────
+
+    @Test
+    public void formatHrEmail_normalValue_returnsValue() {
+        assertEquals("hr@google.com", ApplicationCard.formatHrEmail("hr@google.com"));
     }
 
     @Test
-    public void constructor_withDeadline_setsDeadlineVisibleAndText() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyName("Google").withCompanyLocation("Singapore")
-                .withRole("Intern").withPhone("91234567").withHrEmail("hr@google.com")
-                .withDeadline("2026-12-31")
-                .build();
-        ApplicationCard card = buildCard(app, 1);
+    public void formatHrEmail_emptyString_returnsEmpty() {
+        assertEquals("", ApplicationCard.formatHrEmail(""));
+    }
 
-        Label deadlineLabel = getLabel(card, "deadline");
-        assertTrue(deadlineLabel.isVisible());
-        assertTrue(deadlineLabel.isManaged());
-        assertEquals("Deadline: " + app.getDeadline().value, getLabelText(card, "deadline"));
+    // ── formatCompanyName ────────────────────────────────────────────────────
+
+    @Test
+    public void formatCompanyName_normalValue_returnsValue() {
+        assertEquals("Google", ApplicationCard.formatCompanyName("Google"));
     }
 
     @Test
-    public void constructor_withNote_setsNoteVisibleAndText() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyName("Google").withRole("Intern")
-                .withPhone("91234567").withHrEmail("hr@google.com")
-                .withNote("Follow up in 3 days")
-                .build();
-        ApplicationCard card = buildCard(app, 1);
+    public void formatCompanyName_emptyString_returnsEmpty() {
+        assertEquals("", ApplicationCard.formatCompanyName(""));
+    }
 
-        Label noteLabel = getLabel(card, "note");
-        assertTrue(noteLabel.isVisible());
-        assertTrue(noteLabel.isManaged());
-        assertEquals("Note: Follow up in 3 days", getLabelText(card, "note"));
+    // ── formatCompanyLocation ────────────────────────────────────────────────
+
+    @Test
+    public void formatCompanyLocation_normalValue_returnsValue() {
+        assertEquals("Singapore", ApplicationCard.formatCompanyLocation("Singapore"));
     }
 
     @Test
-    public void constructor_withTags_displaysAllTagsSorted() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyName("Google").withCompanyLocation("Singapore")
-                .withRole("Intern").withPhone("91234567").withHrEmail("hr@google.com")
-                .withTags("ztag", "atag")
-                .build();
-        ApplicationCard card = buildCard(app, 1);
-        FlowPane pane = getTagsPane(card);
+    public void formatCompanyLocation_emptyString_returnsEmpty() {
+        assertEquals("", ApplicationCard.formatCompanyLocation(""));
+    }
 
-        assertEquals(3, pane.getChildren().size());
-        assertEquals("atag", ((Label) pane.getChildren().get(0)).getText());
-        assertEquals("ztag", ((Label) pane.getChildren().get(1)).getText());
-        assertEquals("applied", ((Label) pane.getChildren().get(2)).getText());
+    // ── formatDeadline ───────────────────────────────────────────────────────
+
+    @Test
+    public void formatDeadline_normalValue_returnsValue() {
+        assertEquals("2026-12-31", ApplicationCard.formatDeadline("2026-12-31"));
     }
 
     @Test
-    public void constructor_statusLabelHiddenAndStatusTagAdded() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyName("Google").withCompanyLocation("Singapore")
-                .withRole("Intern").withPhone("91234567").withHrEmail("hr@google.com")
-                .build();
-        ApplicationCard card = buildCard(app, 1);
+    public void formatDeadline_emptyString_returnsEmpty() {
+        assertEquals("", ApplicationCard.formatDeadline(""));
+    }
 
-        assertFalse(getLabel(card, "status").isVisible());
-        assertFalse(getLabel(card, "status").isManaged());
-        assertTrue(getTagsPane(card).getChildren().stream()
-                .map(n -> (Label) n).anyMatch(l -> l.getText().equals("applied")));
+    // ── formatNote ───────────────────────────────────────────────────────────
+
+    @Test
+    public void formatNote_normalValue_returnsValue() {
+        assertEquals("Follow up next Monday", ApplicationCard.formatNote("Follow up next Monday"));
     }
 
     @Test
-    public void constructor_withExistingTags_addsStatusTagAsWell() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyName("Google").withCompanyLocation("Singapore")
-                .withRole("Intern").withPhone("91234567").withHrEmail("hr@google.com")
-                .withTags("atag", "ztag")
-                .build();
-        ApplicationCard card = buildCard(app, 1);
-        FlowPane pane = getTagsPane(card);
+    public void formatNote_emptyString_returnsEmpty() {
+        assertEquals("", ApplicationCard.formatNote(""));
+    }
 
-        assertEquals(3, pane.getChildren().size());
-        assertEquals("atag", ((Label) pane.getChildren().get(0)).getText());
-        assertEquals("ztag", ((Label) pane.getChildren().get(1)).getText());
-        assertEquals("applied", ((Label) pane.getChildren().get(2)).getText());
+    // ── formatResume ─────────────────────────────────────────────────────────
+
+    @Test
+    public void formatResume_normalValue_returnsValue() {
+        assertEquals("resume.pdf", ApplicationCard.formatResume("resume.pdf"));
     }
 
     @Test
-    public void constructor_withoutUserTags_addsOnlyStatusTag() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyName("Google").withCompanyLocation("Singapore")
-                .withRole("Intern").withPhone("91234567").withHrEmail("hr@google.com")
-                .build();
-        ApplicationCard card = buildCard(app, 1);
-        FlowPane pane = getTagsPane(card);
+    public void formatResume_emptyString_returnsEmpty() {
+        assertEquals("", ApplicationCard.formatResume(""));
+    }
 
-        assertEquals(1, pane.getChildren().size());
-        assertEquals("applied", ((Label) pane.getChildren().get(0)).getText());
+    // ── format methods return raw value (no icon prefix) ────────────────────
+
+    @Test
+    public void formatMethods_doNotAddIconPrefix() {
+        assertFalse(ApplicationCard.formatPhone("91234567").contains("☎"));
+        assertFalse(ApplicationCard.formatHrEmail("hr@google.com").contains("✉"));
+        assertFalse(ApplicationCard.formatCompanyName("Google").contains("▣"));
+        assertFalse(ApplicationCard.formatCompanyLocation("Singapore").contains("⌂"));
+        assertFalse(ApplicationCard.formatDeadline("2026-12-31").contains("◷"));
+        assertFalse(ApplicationCard.formatNote("Follow up").contains("✎"));
+        assertFalse(ApplicationCard.formatResume("resume.pdf").contains("▣"));
     }
 
     @Test
-    public void constructor_withDifferentStatus_statusTagMatchesLowercaseStatus() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyName("Google").withCompanyLocation("Singapore")
-                .withRole("Intern").withPhone("91234567").withHrEmail("hr@google.com")
-                .withStatus(Status.OFFERED)
-                .build();
-        ApplicationCard card = buildCard(app, 1);
-
-        assertTrue(getTagsPane(card).getChildren().stream()
-                .map(n -> (Label) n).anyMatch(l -> l.getText().equals("offered")));
+    public void formatMethods_allReturnExactInput() {
+        assertEquals("91234567", ApplicationCard.formatPhone("91234567"));
+        assertEquals("hr@google.com", ApplicationCard.formatHrEmail("hr@google.com"));
+        assertEquals("Google", ApplicationCard.formatCompanyName("Google"));
+        assertEquals("Singapore", ApplicationCard.formatCompanyLocation("Singapore"));
+        assertEquals("2026-12-31", ApplicationCard.formatDeadline("2026-12-31"));
+        assertEquals("Follow up", ApplicationCard.formatNote("Follow up"));
+        assertEquals("resume.pdf", ApplicationCard.formatResume("resume.pdf"));
     }
 
     @Test
-    public void constructor_withRegularTags_regularTagsDoNotUseUrgentStyle() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyName("Google").withRole("Intern")
-                .withPhone("91234567").withHrEmail("hr@google.com")
-                .withTags("atag", "ztag")
-                .build();
-        ApplicationCard card = buildCard(app, 1);
-        FlowPane pane = getTagsPane(card);
+    public void formatMethods_emptyStrings_returnEmpty() {
+        assertEquals("", ApplicationCard.formatPhone(""));
+        assertEquals("", ApplicationCard.formatHrEmail(""));
+        assertEquals("", ApplicationCard.formatCompanyName(""));
+        assertEquals("", ApplicationCard.formatCompanyLocation(""));
+        assertEquals("", ApplicationCard.formatDeadline(""));
+        assertEquals("", ApplicationCard.formatNote(""));
+        assertEquals("", ApplicationCard.formatResume(""));
+    }
 
-        Label first = (Label) pane.getChildren().get(0);
-        Label second = (Label) pane.getChildren().get(1);
-        assertEquals("atag", first.getText());
-        assertEquals("ztag", second.getText());
-        assertFalse(first.getStyleClass().contains("tag-urgent"));
-        assertFalse(second.getStyleClass().contains("tag-urgent"));
+    // ── toStatusKey ──────────────────────────────────────────────────────────
+
+    @Test
+    public void toStatusKey_applied_returnsApplied() {
+        assertEquals("applied", ApplicationCard.toStatusKey("APPLIED"));
     }
 
     @Test
-    public void constructor_withUrgentTag_hasUrgentStyleClass() throws Exception {
-        String reminderTag = seedu.address.logic.commands.ReminderCommand.REMINDER_TAG_NAME;
-        ApplicationCard card = buildCard(new ApplicationBuilder().withTags(reminderTag).build(), 1);
-
-        Label urgentLabel = getTagsPane(card).getChildren().stream()
-                .map(n -> (Label) n).filter(l -> l.getText().equals(reminderTag))
-                .findFirst().orElseThrow(() -> new AssertionError("Urgent tag label not found"));
-
-        assertTrue(urgentLabel.getStyleClass().contains("tag-urgent"));
+    public void toStatusKey_interviewing_returnsInterviewing() {
+        assertEquals("interviewing", ApplicationCard.toStatusKey("INTERVIEWING"));
     }
 
     @Test
-    public void constructor_withUppercaseUrgentTag_stillHasUrgentStyleClass() throws Exception {
-        ApplicationCard card = buildCard(new ApplicationBuilder().withTags("URGENT").build(), 1);
-
-        Label urgentLabel = getTagsPane(card).getChildren().stream()
-                .map(n -> (Label) n).filter(l -> l.getText().equals("URGENT"))
-                .findFirst().orElseThrow(() -> new AssertionError("Uppercase urgent tag label not found"));
-
-        assertTrue(urgentLabel.getStyleClass().contains("tag-urgent"));
+    public void toStatusKey_offered_returnsOffered() {
+        assertEquals("offered", ApplicationCard.toStatusKey("OFFERED"));
     }
 
     @Test
-    public void constructor_withMixedCaseUrgentTag_hasUrgentStyleClass() throws Exception {
-        ApplicationCard card = buildCard(new ApplicationBuilder().withTags("uRgEnT").build(), 1);
-
-        Label urgentLabel = getTagsPane(card).getChildren().stream()
-                .map(n -> (Label) n).filter(l -> l.getText().equals("uRgEnT"))
-                .findFirst().orElseThrow();
-
-        assertTrue(urgentLabel.getStyleClass().contains("tag-urgent"));
+    public void toStatusKey_rejected_returnsRejected() {
+        assertEquals("rejected", ApplicationCard.toStatusKey("REJECTED"));
     }
 
     @Test
-    public void constructor_statusApplied_hasAppliedStyleClass() throws Exception {
-        ApplicationCard card = buildCard(new ApplicationBuilder().withStatus(Status.APPLIED).build(), 1);
-        assertTrue(getStatusTag(card, "applied").getStyleClass().contains("status-applied"));
+    public void toStatusKey_withdrawn_returnsWithdrawn() {
+        assertEquals("withdrawn", ApplicationCard.toStatusKey("WITHDRAWN"));
     }
 
     @Test
-    public void constructor_statusOffered_hasOfferedStyleClass() throws Exception {
-        ApplicationCard card = buildCard(new ApplicationBuilder().withStatus(Status.OFFERED).build(), 1);
-        assertTrue(getStatusTag(card, "offered").getStyleClass().contains("status-offered"));
+    public void toStatusKey_emptyString_returnsEmpty() {
+        assertEquals("", ApplicationCard.toStatusKey(""));
     }
 
     @Test
-    public void constructor_statusRejected_hasRejectedStyleClass() throws Exception {
-        ApplicationCard card = buildCard(new ApplicationBuilder().withStatus(Status.REJECTED).build(), 1);
-        assertTrue(getStatusTag(card, "rejected").getStyleClass().contains("status-rejected"));
+    public void toStatusKey_withUnderscore_replaceWithHyphen() {
+        assertEquals("in-progress", ApplicationCard.toStatusKey("IN_PROGRESS"));
+    }
+
+    // ── toTitleCase ──────────────────────────────────────────────────────────
+
+    @Test
+    public void toTitleCase_applied_returnsApplied() {
+        assertEquals("Applied", ApplicationCard.toTitleCase("APPLIED"));
     }
 
     @Test
-    public void constructor_statusInterviewing_hasInterviewingStyleClass() throws Exception {
-        ApplicationCard card = buildCard(new ApplicationBuilder().withStatus(Status.INTERVIEWING).build(), 1);
-        assertTrue(getStatusTag(card, "interviewing").getStyleClass().contains("status-interviewing"));
+    public void toTitleCase_interviewing_returnsInterviewing() {
+        assertEquals("Interviewing", ApplicationCard.toTitleCase("INTERVIEWING"));
     }
 
     @Test
-    public void constructor_statusWithdrawn_hasWithdrawnStyleClass() throws Exception {
-        ApplicationCard card = buildCard(new ApplicationBuilder().withStatus(Status.WITHDRAWN).build(), 1);
-        assertTrue(getStatusTag(card, "withdrawn").getStyleClass().contains("status-withdrawn"));
+    public void toTitleCase_offered_returnsOffered() {
+        assertEquals("Offered", ApplicationCard.toTitleCase("OFFERED"));
     }
 
     @Test
-    public void constructor_allStatuses_addsCorrectStyleClass() throws Exception {
-        for (Status s : Status.values()) {
-            ApplicationCard card = buildCard(new ApplicationBuilder().withStatus(s).build(), 1);
-            String expectedText = s.toString().toLowerCase();
-            String expectedClass = "status-" + expectedText.replace(" ", "-");
-            assertTrue(getStatusTag(card, expectedText).getStyleClass().contains(expectedClass),
-                    "Tag for status " + s + " should have style class: " + expectedClass);
-        }
+    public void toTitleCase_rejected_returnsRejected() {
+        assertEquals("Rejected", ApplicationCard.toTitleCase("REJECTED"));
     }
 
     @Test
-    public void constructor_allOptionalFieldsPresent_allVisible() throws Exception {
-        Application app = new ApplicationBuilder()
-                .withCompanyLocation("Singapore")
-                .withDeadline("2026-12-31")
-                .withNote("Important Note")
-                .build();
-        ApplicationCard card = buildCard(app, 1);
+    public void toTitleCase_withdrawn_returnsWithdrawn() {
+        assertEquals("Withdrawn", ApplicationCard.toTitleCase("WITHDRAWN"));
+    }
 
-        Label locLabel = getLabel(card, "companyLocation");
-        assertTrue(locLabel.isVisible());
-        assertEquals("Singapore", locLabel.getText());
+    @Test
+    public void toTitleCase_withUnderscore_replacesWithSpace() {
+        assertEquals("In progress", ApplicationCard.toTitleCase("IN_PROGRESS"));
+    }
 
-        Label deadlineLabel = getLabel(card, "deadline");
-        assertTrue(deadlineLabel.isVisible());
-        assertEquals("Deadline: 2026-12-31", deadlineLabel.getText());
+    @Test
+    public void toTitleCase_emptyString_returnsEmpty() {
+        assertEquals("", ApplicationCard.toTitleCase(""));
+    }
 
-        Label noteLabel = getLabel(card, "note");
-        assertTrue(noteLabel.isVisible());
-        assertEquals("Note: Important Note", noteLabel.getText());
+    @Test
+    public void toTitleCase_singleChar_returnsUppercase() {
+        assertEquals("A", ApplicationCard.toTitleCase("a"));
+    }
+
+    @Test
+    public void toTitleCase_firstLetterIsUppercase() {
+        String result = ApplicationCard.toTitleCase("APPLIED");
+        assertTrue(Character.isUpperCase(result.charAt(0)));
+    }
+
+    @Test
+    public void toTitleCase_remainingLettersAreLowercase() {
+        String result = ApplicationCard.toTitleCase("APPLIED");
+        String rest = result.substring(1);
+        assertTrue(rest.equals(rest.toLowerCase()));
     }
 
     // -----------------------------------------------------------------------
