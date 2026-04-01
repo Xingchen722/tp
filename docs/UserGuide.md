@@ -153,12 +153,15 @@ Examples:
 
 ### Changing the default status: `status`
 
-Changes the status of an application to APPLIED, INTERVIEWING, OFFERED, REJECTED, or WITHDRAWN.
-The accepted input keywords are apply, interviewing, offered, rejected, and withdraw, and they are not case-sensitive.
+* Changes the status of an application to APPLIED, INTERVIEWING, OFFERED, REJECTED, or WITHDRAWN.
+* The accepted input keywords are apply, interviewing, offered, rejected, and withdraw, and they are not case-sensitive.
 
 Format: `status INDEX s/STATUS`
 
-* The status is case-insensitive. e.g. `REJECTED` will turn out to be `rejected`
+* Edits the application at the specified `INDEX`.
+* The index refers to the index number shown in the displayed application list.
+* The index **must be a positive integer** `1, 2, 3, ...`
+* * The status is case-insensitive. e.g. `REJECTED` will turn out to be `rejected`
 * Only status given above can be chosen.
 * Only one application can be changed at a time.
 * Status will appear as a tag in the UI.
@@ -211,6 +214,7 @@ Format: `reminder`
 * The application list will be sorted by deadline in ascending order (nearest first).
 * Applications with the nearest deadlines appear at the top, and those without a deadline are placed at the bottom.
 * Applications with a deadline within the next three days (including today) will be automatically marked with a red `Urgent` tag in the UI.
+* `Urgent` will be considered as tag, if you plan to change `tag`, this will also disappear, only after you change deadline by using `deadline INDEX [DATE_TIME]` or `edit INDEX d/[DATE_TIME]`
 
 ### Sorting applications : `sort`
 
@@ -258,6 +262,9 @@ Attaches your resume to a specific application.
 
 Format: `resume INDEX rp/RESUME_PATH` / `openresume INDEX` / `removeresume INDEX`
 
+* Edits the application at the specified `INDEX`.
+* The index refers to the index number shown in the displayed application list.
+* The index **must be a positive integer** `1, 2, 3, ...`
 * You must specify the path of you resume。
 * This feature will not save your resume in the storage, but just a reference to your own documentation.
 * Please don't change the path of the file or it will result in unexpected errors.
