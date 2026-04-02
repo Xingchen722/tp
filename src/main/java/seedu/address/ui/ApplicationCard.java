@@ -1,7 +1,9 @@
 package seedu.address.ui;
 
-import static seedu.address.logic.commands.ReminderCommand.REMINDER_TAG_NAME;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
@@ -27,6 +29,11 @@ public class ApplicationCard extends UiPart<Region> {
     private static final String FXML = "ApplicationListCard.fxml";
     private static final Color ICON_COLOR = Color.WHITE;
     private static final int ICON_SIZE = 14;
+    private static final DateTimeFormatter DEADLINE_DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final Color ROLE_COLOR_DEFAULT = Color.WHITE;
+    private static final Color ROLE_COLOR_URGENT = Color.web("#e53935");
+    private static final Color ROLE_COLOR_OVERDUE = Color.web("#fb8c00");
 
     /** The application displayed by this card. */
     public final Application application;
@@ -51,13 +58,16 @@ public class ApplicationCard extends UiPart<Region> {
 
         id.setText(displayedIndex + ". ");
         role.setText(application.getRole().roleName);
+        LocalDateTime now = LocalDateTime.now();
+        Color roleColor = getRoleColor(application, now);
+        role.setStyle("-fx-text-fill: " + toHexColor(roleColor) + ";");
 
         if (application.getDeadline().isEmpty()) {
             deadline.setVisible(false);
             deadline.setManaged(false);
         } else {
             deadline.setText(application.getDeadline().value);
-            deadline.setGraphic(calendarIcon());
+            deadline.setGraphic(calendarIcon(getDeadlineIconColor(application, now)));
         }
 
         String statusText = application.getStatus().toString();
@@ -70,9 +80,6 @@ public class ApplicationCard extends UiPart<Region> {
                 .forEach(tag -> {
                     Label chip = new Label(tag.tagName);
                     chip.getStyleClass().add("chip");
-                    if (tag.tagName.equalsIgnoreCase(REMINDER_TAG_NAME)) {
-                        chip.getStyleClass().add("chip-urgent");
-                    }
                     tags.getChildren().add(chip);
                 });
 
@@ -144,10 +151,10 @@ public class ApplicationCard extends UiPart<Region> {
     /**
      * Creates a red calendar icon for the deadline field.
      */
-    private FontIcon calendarIcon() {
+    private FontIcon calendarIcon(Color iconColor) {
         FontIcon fi = new FontIcon(FontAwesomeSolid.CALENDAR_ALT);
         fi.setIconSize(ICON_SIZE);
-        fi.setIconColor(Color.web("#e53935"));
+        fi.setIconColor(iconColor);
         return fi;
     }
 
@@ -200,5 +207,94 @@ public class ApplicationCard extends UiPart<Region> {
 
     static String formatResume(String value) {
         return value;
+    }
+
+    static Color getRoleColor(Application application, LocalDateTime now) {
+        if (!ReminderHighlightState.isEnabled()) {
+            return ROLE_COLOR_DEFAULT;
+        }
+
+        String rawDeadline = application.getDeadline().value;
+        LocalDateTime deadlineDateTime = parseDeadlineAsDateTime(rawDeadline);
+        if (deadlineDateTime == null) {
+            return ROLE_COLOR_DEFAULT;
+        }
+
+        // For date-only deadlines (yyyy-MM-dd), compare using dates (ignore current time).
+        if (rawDeadline.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            LocalDate deadlineDate = parseDeadlineAsLocalDate(rawDeadline);
+            if (deadlineDate == null) {
+                return ROLE_COLOR_DEFAULT;
+            }
+
+            LocalDate today = now.toLocalDate();
+            if (deadlineDate.isBefore(today)) {
+                return ROLE_COLOR_OVERDUE;
+            }
+            if (!deadlineDate.isAfter(today.plusDays(3))) {
+                return ROLE_COLOR_URGENT;
+            }
+            return ROLE_COLOR_DEFAULT;
+        }
+
+        // For datetime deadlines (yyyy-MM-dd HH:mm), compare with minute precision.
+        if (deadlineDateTime.isBefore(now)) {
+            return ROLE_COLOR_OVERDUE;
+        }
+
+        if (!deadlineDateTime.isAfter(now.plusDays(3))) {
+            return ROLE_COLOR_URGENT;
+        }
+
+        return ROLE_COLOR_DEFAULT;
+    }
+
+    static Color getDeadlineIconColor(Application application, LocalDateTime now) {
+        if (!ReminderHighlightState.isEnabled()) {
+            return ROLE_COLOR_DEFAULT;
+        }
+
+        Color roleColor = getRoleColor(application, now);
+        if (ROLE_COLOR_OVERDUE.equals(roleColor)) {
+            return ROLE_COLOR_OVERDUE;
+        }
+
+        if (ROLE_COLOR_URGENT.equals(roleColor)) {
+            return ROLE_COLOR_URGENT;
+        }
+
+        return ROLE_COLOR_DEFAULT;
+    }
+
+    private static LocalDateTime parseDeadlineAsDateTime(String rawDeadline) {
+        try {
+            if (rawDeadline.matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}")) {
+                return LocalDateTime.parse(rawDeadline, DEADLINE_DATE_TIME_FORMATTER);
+            }
+            if (rawDeadline.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                return LocalDate.parse(rawDeadline).atTime(LocalTime.MAX);
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    private static LocalDate parseDeadlineAsLocalDate(String rawDeadline) {
+        try {
+            if (rawDeadline.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                return LocalDate.parse(rawDeadline);
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    private static String toHexColor(Color color) {
+        int r = (int) Math.round(color.getRed() * 255);
+        int g = (int) Math.round(color.getGreen() * 255);
+        int b = (int) Math.round(color.getBlue() * 255);
+        return String.format("#%02x%02x%02x", r, g, b);
     }
 }

@@ -39,6 +39,25 @@ public class ApplicationTest {
                 .build();
         assertTrue(GOOGLE_SWE.isSameApplication(editedAlice));
 
+        // same role and company name but different company location -> returns false
+        editedAlice = new ApplicationBuilder(GOOGLE_SWE)
+                .withCompanyLocation("Another Location")
+                .build();
+        assertFalse(GOOGLE_SWE.isSameApplication(editedAlice));
+
+        // one location empty and one non-empty -> returns false
+        Application withEmptyLocation = new ApplicationBuilder(GOOGLE_SWE)
+                .withCompanyLocation("")
+                .build();
+        assertFalse(GOOGLE_SWE.isSameApplication(withEmptyLocation));
+
+        // both locations empty -> returns true
+        Application bothEmptyLocation = new ApplicationBuilder(withEmptyLocation)
+                .withPhone(VALID_PHONE_BOB)
+                .withHrEmail(VALID_HREMAIL_BOB)
+                .build();
+        assertTrue(withEmptyLocation.isSameApplication(bothEmptyLocation));
+
         // different role, all other attributes same -> returns false
         editedAlice = new ApplicationBuilder(GOOGLE_SWE).withRole(VALID_ROLE_BOB).build();
         assertFalse(GOOGLE_SWE.isSameApplication(editedAlice));
@@ -51,6 +70,26 @@ public class ApplicationTest {
         String roleWithTrailingSpaces = VALID_ROLE_BOB + " ";
         editedBob = new ApplicationBuilder(BOB).withRole(roleWithTrailingSpaces).build();
         assertFalse(BOB.isSameApplication(editedBob));
+
+        // company name differs only in case, same location -> returns true
+        Application caseChangedCompanyName = new ApplicationBuilder(GOOGLE_SWE)
+                .withCompany(GOOGLE_SWE.getCompany().companyName.toUpperCase())
+                .withCompanyLocation(GOOGLE_SWE.getCompany().companyLocation)
+                .build();
+        assertTrue(GOOGLE_SWE.isSameApplication(caseChangedCompanyName));
+
+        // company location differs only in case, same company name -> returns true
+        Application caseChangedCompanyLocation = new ApplicationBuilder(GOOGLE_SWE)
+                .withCompanyLocation(GOOGLE_SWE.getCompany().companyLocation.toUpperCase())
+                .build();
+        assertTrue(GOOGLE_SWE.isSameApplication(caseChangedCompanyLocation));
+
+        // company name differs (not just in case), same role -> returns false
+        Application differentCompanyName = new ApplicationBuilder(GOOGLE_SWE)
+                .withCompanyName("Some Other Company")
+                .withCompanyLocation(GOOGLE_SWE.getCompany().companyLocation)
+                .build();
+        assertFalse(GOOGLE_SWE.isSameApplication(differentCompanyName));
     }
 
     @Test
@@ -90,6 +129,14 @@ public class ApplicationTest {
     }
 
     @Test
+    public void equals_sameValuesDifferentStatus_returnsFalse() {
+        Application editedAlice = new ApplicationBuilder(GOOGLE_SWE)
+                .withStatus(Status.REJECTED)
+                .build();
+        assertFalse(GOOGLE_SWE.equals(editedAlice));
+    }
+
+    @Test
     public void constructor_withoutStatus_defaultsToApplied() {
         Application applicationWithDefaultStatus = new Application(
                 GOOGLE_SWE.getRole(),
@@ -99,7 +146,10 @@ public class ApplicationTest {
                 GOOGLE_SWE.getTags());
 
         assertEquals(Status.APPLIED, applicationWithDefaultStatus.getStatus());
+        assertEquals(Deadline.getEmptyDeadline(), applicationWithDefaultStatus.getDeadline());
+        assertEquals(new Note(""), applicationWithDefaultStatus.getNote());
         assertEquals(Resume.getEmptyResume(), applicationWithDefaultStatus.getResume());
+        assertFalse(applicationWithDefaultStatus.hasResume());
     }
 
     @Test
