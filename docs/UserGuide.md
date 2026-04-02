@@ -3,7 +3,9 @@ layout: page
 title: User Guide
 ---
 
-Hired! is a **desktop app for managing internship applications, optimized for use via a Command Line Interface** (CLI) while still providing the benefits of a Graphical User Interface (GUI). If you can type fast, Hired! can help you manage your internship applications more efficiently than traditional GUI apps.
+Hired! is a **desktop app for managing internship applications, optimized for use via a Command Line Interface** (CLI) while still providing the benefits of a Graphical User Interface (GUI).
+
+If you can type fast, Hired! can help you manage your internship applications more efficiently than traditional GUI apps (like Google Sheet, Word).
 
 * Table of Contents
   {:toc}
@@ -13,6 +15,7 @@ Hired! is a **desktop app for managing internship applications, optimized for us
 ## Quick start
 
 1. Ensure you have Java `17` or above installed on your computer.<br>
+   You can download the [Oracle version](https://www.oracle.com/java/technologies/downloads/#java17) or another alternative such as the OpenJDK version.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
 2. Download the latest `.jar` file from the [project release page](https://github.com/AY2526S2-CS2103T-T13-3/tp/releases/tag/v1.0).
@@ -20,18 +23,20 @@ Hired! is a **desktop app for managing internship applications, optimized for us
 3. Copy the file to the folder you want to use as the _home folder_ for Hired!.
 
 4. Open a command terminal, `cd` into the folder you put the jar file in, and run the application using `java -jar hired.jar`.<br>
+   In case you are curious about how to deal with `cd`, here is [a simple tutorial](https://www.ibm.com/docs/en/aix/7.1.0?topic=directories-changing-another-directory-cd-command).<br>
    A GUI similar to the one below should appear in a few seconds. Note that the app contains some sample application records.<br>
+   Moreover, it is normal to see some warning messages printed on your terminal.<br>
    ![Ui](images/Ui_current.png)
 
 5. Type the command in the command box and press Enter to execute it. For example, typing **`help`** and pressing Enter will open the help window.<br>
-   Some example commands you can try:
+   Some example commands you can try to have a taste of **Hired!**:
 
-    * `list` : Lists all application records.
+    * `list` : Lists all existing application records.
     * `add r/Software Engineer p/98765432 e/hr@google.com c/Google t/interview note/Met recruiter at career fair` : Adds an application record for a Software Engineer role at Google with a note.
     * `findnote recruiter` : Finds applications whose notes contain `recruiter`.
     * `delete 3` : Deletes the 3rd application shown in the current list.
     * `clear` : Deletes all application records.
-    * `exit` : Exits the app.
+    * `exit` : Exits our app.
 
 6. Refer to the [Features](#features) below for details of each command.
 
@@ -139,8 +144,8 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 * The search is case-insensitive. e.g. `engineer` will match `Engineer`
 * The order of the keywords does not matter.
 * Only the role is searched.
-* Only full words will be matched.
-* Applications matching at least one keyword will be returned (i.e. `OR` search).
+* Partial words will also be matched. e.g. `eng` will match `Engineer`
+* Applications matching at least one keyword will be returned, if given more than 1 keyword (i.e. `OR` search).
 
 Examples:
 * `find engineer` returns applications with roles containing `engineer`
@@ -155,6 +160,7 @@ Format: `findnote KEYWORD [MORE_KEYWORDS]`
 * The search is case-insensitive. e.g. `follow` will match `Follow`
 * The order of the keywords does not matter.
 * Only the note field is searched.
+* Partial words will also be matched. e.g. `rec` will match `recruit`
 * Applications matching at least one keyword will be returned (i.e. `OR` search).
 
 Examples:
@@ -187,7 +193,7 @@ Sets or updates the deadline for the application identified by its index.
 Format: `deadline INDEX DATE_TIME`
 
 * The `DATE_TIME` can be `yyyy-MM-dd`, `yyyy-MM-dd HH:mm`.
-* We are not accept `yyyy-MM-dd HH:60`
+* Our app do not accept `yyyy-MM-dd HH:60` or any invalid date and time
 * The index refers to the index number shown in the displayed application list.
 * This deadline is used by `reminder` and `sort time`.
 
@@ -201,7 +207,6 @@ Examples:
 * `deadline 2 2026-03-25` is equivalent to `edit 2 d/2026-03-25`
 This is intended to give user more flexibility in entering command.
 This is a feature not a bug.
-
 
 ### Deleting an application : `delete`
 
