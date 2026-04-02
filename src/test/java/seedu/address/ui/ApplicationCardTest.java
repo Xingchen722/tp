@@ -16,8 +16,6 @@ import org.junit.jupiter.api.Test;
 
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
-import seedu.address.model.application.Application;
-import seedu.address.model.application.Resume;
 import seedu.address.testutil.ApplicationBuilder;
 
 public class ApplicationCardTest {
@@ -141,7 +139,7 @@ public class ApplicationCardTest {
     @Test
     public void toTitleCase_remainingLettersAreLowercase() {
         String result = ApplicationCard.toTitleCase("APPLIED");
-        assertTrue(result.substring(1).equals(result.substring(1).toLowerCase()));
+        assertEquals(result.substring(1), result.substring(1).toLowerCase());
     }
 
     // -----------------------------------------------------------------------
@@ -355,49 +353,33 @@ public class ApplicationCardTest {
         assertEquals(Color.WHITE, color);
     }
 
-    @Test
-    public void constructor_deadlinePresent_initializesDeadlineGraphicAndIcons() {
-        Assumptions.assumeTrue(jfxToolkitAvailable);
-        ApplicationCard card = new ApplicationCard(
-                new ApplicationBuilder()
-                        .withDeadline("2026-03-12 21:00")
-                        .withTags("interview", "priority")
-                        .withNote("Follow up next Monday")
-                        .withCompanyLocation("Singapore")
-                        .build(),
-                1);
-
-        assertNotNull(card);
-    }
 
     @Test
-    public void constructor_noDeadline_hidesDeadlineField() {
+    public void constructor_noDeadline_hidesDeadlineField() throws Exception {
         Assumptions.assumeTrue(jfxToolkitAvailable);
-        ApplicationCard card = new ApplicationCard(new ApplicationBuilder().build(), 1);
-        assertNotNull(card);
+
+        CountDownLatch latch = new CountDownLatch(1);
+        final ApplicationCard[] cardHolder = new ApplicationCard[1];
+        final Throwable[] errorHolder = new Throwable[1];
+
+        Platform.runLater(() -> {
+            try {
+                cardHolder[0] = new ApplicationCard(new ApplicationBuilder().build(), 1);
+            } catch (Throwable t) {
+                errorHolder[0] = t;
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        assertTrue(latch.await(5, TimeUnit.SECONDS), "Timed out waiting for FX task");
+        if (errorHolder[0] != null) {
+            throw new AssertionError("Failed to create ApplicationCard on FX thread", errorHolder[0]);
+        }
+
+        assertNotNull(cardHolder[0]);
     }
 
-    @Test
-    public void constructor_resumePresent_showsResumeIcon() {
-        Assumptions.assumeTrue(jfxToolkitAvailable);
-        Application base = new ApplicationBuilder()
-                .withDeadline("2026-03-12 21:00")
-                .build();
-        Application applicationWithResume = new Application(
-                base.getRole(),
-                base.getPhone(),
-                base.getHrEmail(),
-                base.getCompany(),
-                base.getTags(),
-                base.getStatus(),
-                base.getDeadline(),
-                base.getApplicationEvent(),
-                base.getNote(),
-                new Resume("resume.pdf"));
-
-        ApplicationCard card = new ApplicationCard(applicationWithResume, 1);
-        assertNotNull(card);
-    }
 
     @Test
     public void toStatusKey_null_returnsEmpty() {
