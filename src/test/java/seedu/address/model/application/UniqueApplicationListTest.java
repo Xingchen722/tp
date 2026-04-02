@@ -49,6 +49,15 @@ public class UniqueApplicationListTest {
     }
 
     @Test
+    public void contains_applicationWithDifferentLocationInList_returnsFalse() {
+        uniqueApplicationList.add(GOOGLE_SWE);
+        Application editedAlice = new ApplicationBuilder(GOOGLE_SWE)
+                .withCompanyLocation("Another Location")
+                .build();
+        assertFalse(uniqueApplicationList.contains(editedAlice));
+    }
+
+    @Test
     public void add_nullApplication_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> uniqueApplicationList.add(null));
     }
