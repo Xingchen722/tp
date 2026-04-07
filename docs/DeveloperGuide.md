@@ -2,9 +2,6 @@
 layout: page
 title: Developer Guide
 ---
-* Table of Contents
-  {:toc}
-
 # Hired! Developer Guide
 --------------------------------------------------------------------------------------------------------------------
 
@@ -265,6 +262,51 @@ How the `add` command works:
 1. `AddCommand` checks whether the target application already exists (`Model#hasApplication`).
 1. If not duplicated, the new application is added (`Model#addApplication`).
 1. The updated application book state is committed through `Model#commitAddressBook()`.
+
+## Sort Feature
+
+The sequence diagram below illustrates the interactions within the `Logic` component for a `sort` command.
+
+![Interactions Inside the Logic Component for the `sort` Command](images/SortSequenceDiagram-Logic.png)
+
+How the `sort` command works:
+
+1. When the user enters a `sort` command, `LogicManager` passes it to `AddressBookParser`.
+1. `AddressBookParser` creates a `SortCommandParser` to parse command arguments.
+1. `SortCommandParser` validates and parses the sort criteria.
+1. A `SortCommand` object is created and executed.
+1. `SortCommand` selects a comparator based on the parsed criteria.
+1. `SortCommand` updates the sorted application list (`Model#updateSortedApplicationList(...)`).
+1. The updated application book state is committed through `Model#commitAddressBook()`.
+
+
+(just my idea, you can change)
+## Delete Feature
+
+## Edit Feature
+
+## Tag Feature ?
+* add
+* delete
+* edit
+
+## Status Feature
+* add
+* delete
+* edit
+
+## Deadline Feature
+* add
+* delete
+* edit
+
+## Note Feature
+* add
+* delete
+* edit
+
+## OA
+## Resume
 
 
 --------------------------------------------------------------------------------------------------------------------
