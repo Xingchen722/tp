@@ -298,3 +298,4 @@ public class ApplicationCard extends UiPart<Region> {
         return String.format("#%02x%02x%02x", r, g, b);
     }
 }
+
