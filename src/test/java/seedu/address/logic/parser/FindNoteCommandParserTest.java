@@ -89,24 +89,4 @@ public class FindNoteCommandParserTest {
 
         assertEquals(expectedFindNoteCommand, parser.parse("    recruiter    "));
     }
-
-    @Test
-    public void parse_validArgs_returnsFindNoteCommand() throws Exception {
-        // EP: normal valid input -> returns expected FindNoteCommand
-    public void parse_validArgsMultipleKeywords_returnsFindNoteCommand() throws Exception {
-        // EP: valid input with multiple keywords
-        FindNoteCommand expectedFindNoteCommand =
-                new FindNoteCommand(new NoteContainsKeywordsPredicate(Arrays.asList("follow", "recruiter")));
-
-        assertEquals(expectedFindNoteCommand, parser.parse(" follow recruiter"));
-    }
-
-    @Test
-    public void parse_validArgsWithExtraSpaces_returnsFindNoteCommand() throws Exception {
-        // EP: valid input with irregular spacing
-        FindNoteCommand expectedFindNoteCommand =
-                new FindNoteCommand(new NoteContainsKeywordsPredicate(Arrays.asList("follow", "recruiter")));
-
-        assertEquals(expectedFindNoteCommand, parser.parse("   follow    recruiter   "));
-    }
 }
