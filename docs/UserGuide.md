@@ -134,8 +134,8 @@ Format: `add r/ROLE p/PHONE e/EMAIL c/COMPANY_NAME [l/COMPANY_LOCATION] [t/TAG].
      >    * if both locations are empty (e.g. `l/` is omitted), they are treated as the same;
 >    * if one location is empty and the other is not, they are treated as different.
 > **Tip:** An application can have any number of tags (including 0).
-    > **Tip:** A note can be added when creating an application by using `note/`.
-    > **Default after successful add:** status is `APPLIED`, deadline is unset, and reminder color remains default until `reminder` is enabled.
+> **Tip:** A note can be added when creating an application by using `note/`.
+> **Default after successful add:** status is `APPLIED`, deadline is unset, and reminder color remains default until `reminder` is enabled.
 
 Examples:
 * `add r/Software Engineer p/98765432 e/hr@google.com c/Google`
