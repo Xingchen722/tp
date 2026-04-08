@@ -11,6 +11,7 @@ It is designed for users who prefer typing commands and want to track applicatio
 * Table of Contents
   * [Quick start](#quick-start)
   * [Features](#features)
+    * [Default behavior at a glance](#default-behavior-at-a-glance)
     * [Viewing help : `help`](#viewing-help--help)
     * [Adding an application: `add`](#adding-an-application-add)
     * [Listing all applications : `list`](#listing-all-applications--list)
@@ -25,11 +26,15 @@ It is designed for users who prefer typing commands and want to track applicatio
     * [Undoing previous commands : `undo`](#undoing-previous-commands--undo)
     * [Redoing undone commands : `redo`](#redoing-undone-commands--redo)
     * [Attaching your resume : `resume`](#attaching-your-resume--resume)
+    * [Opening your resume : `openresume`](#opening-your-resume--openresume)
+    * [Removing your resume : `removeresume`](#removing-your-resume--removeresume)
+    * [Setting an online assessment : `assessment`](#setting-an-online-assessment--assessment)
+    * [Removing an online assessment : `removeevent`](#removing-an-online-assessment--removeevent)
     * [Clearing all entries : `clear`](#clearing-all-entries--clear)
     * [Exiting the program : `exit`](#exiting-the-program--exit)
     * [Saving the data](#saving-the-data)
     * [Editing the data file](#editing-the-data-file)
-    * [Archiving data files `[coming in v6.0]`](#archiving-data-files-coming-in-v20)
+    * [Archiving data files `[coming in v6.0]`](#archiving-data-files-coming-in-v60)
   * [FAQ](#faq)
   * [Known issues](#known-issues)
   * [Command summary](#command-summary)
@@ -124,9 +129,12 @@ Format: `add r/ROLE p/PHONE e/EMAIL c/COMPANY_NAME [l/COMPANY_LOCATION] [t/TAG].
 
 > **Note:** In Hired!,
 > * `r/` is used for the internship role,
+> * `p/` is used for the recruiter or company contact phone number,
 > * `c/` is used for the company name, and
 > * `l/` (optional) is used for the company location.
 >
+> > Phone numbers are intentionally not restricted to a fixed length, as valid phone number lengths and formats vary across countries.
+> 
 > Applications are considered duplicates (and cannot be added) only when they have the same identity:
 > 1) the same `role`,
 > 2) the same `company name`, and
@@ -354,17 +362,47 @@ Examples:
 
 Attaches your resume to a specific application.
 
-Format: `resume INDEX rp/RESUME_PATH` / `openresume INDEX` / `removeresume INDEX`
+Format: `resume INDEX rp/RESUME_PATH`
 
 * Edits the application at the specified `INDEX`.
 * The index refers to the index number shown in the displayed application list.
 * The index **must be a positive integer** `1, 2, 3, ...`
-* You must specify the path of you resume。
+* You must specify the path of you resume.
+* The `RESUME_PATH` is the absolute address of your file in your computer.
 * This feature will not save your resume in the storage, but just a reference to your own documentation.
-* Please don't change the path of the file or it will result in unexpected errors.
+* Make sure your file is ended with ".pdf, .doc, or .docx", no other format will be accepted.
+* Please don't change the path of the file, or it will result in unexpected errors.
 
 Examples:
-* `resume 1 rp/C:\Users\qiyu\Documents\resume.pdf` will attach your resume to the first application.
+* (For Windows) `resume 1 rp/C:\Users\john\Documents\resume.pdf` will attach your resume to the first application.
+* (For Mac) `resume 1 rp/Users/john/Documents/resume.pdf` will attach your resume to the first application.
+
+### Opening your resume : `openresume`
+
+Opens your resume of a specific application.
+
+Format: `openresume INDEX`
+
+* Opens the resume of the application at the specified `INDEX`.
+* The index refers to the index number shown in the displayed application list.
+* The index **must be a positive integer** `1, 2, 3, ...`
+
+Examples:
+* `openresume 2` will open your resume of the first application in the default way.
+
+### Removing your resume : `removeresume`
+
+Removes your resume of a specific application.
+
+Format: `removeresume INDEX`
+
+* Edits the application at the specified `INDEX`.
+* The index refers to the index number shown in the displayed application list.
+* The index **must be a positive integer** `1, 2, 3, ...`
+* This feature will not delete your resume file in your computer, but just remove the reference.
+
+Examples:
+* `removeresume 3` will remove your resume of the third application.
 
 ### Setting an online assessment : `assessment`
 
@@ -481,6 +519,8 @@ Action | Format, Examples
 **Undo** | `undo` <br> Reverts the most recent data-modifying command (up to 10 steps).
 **Redo** | `redo` <br> Reapplies the most recently undone command.
 **Resume** | `resume INDEX rp/RESUME_PATH` <br> Attaches a resume to a specific application.
+**Open Resume** | `openresume INDEX` <br> Opens a resume of a specific application.
+**Remove Resume** | `removeresume INDEX` <br> Removes a resume of a specific application.
 **Assessment** | `assessment INDEX el/LOCATION et/DATE_TIME ap/PLATFORM al/LINK` <br> e.g. `assessment 1 el/home et/2026-03-24 10:00 ap/HackerRank al/www.hackerrank.com`
 **Remove Event** | `removeevent INDEX` <br> e.g. `removeevent 1`
 **Exit** | `exit`
