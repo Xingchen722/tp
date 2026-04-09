@@ -53,7 +53,7 @@ public class StringUtil {
      * containsAllKeywordsAsSubstrings("Google Singapore", "Goo SING") == true
      * containsAllKeywordsAsSubstrings("Frontend", "back") == false
      * </pre>
-     * * @param sentence The target text to be searched. Must not be null.
+     * @param sentence The target text to be searched. Must not be null.
      * @param input A string containing one or more whitespace-separated keywords. Must not be null.
      * @return True if every keyword in the input is found as a substring within the sentence.
      * @throws NullPointerException if {@code sentence} or {@code input} is null.
