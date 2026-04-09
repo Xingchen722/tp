@@ -70,7 +70,7 @@ public class StringUtil {
 
         // Ensure every keyword exists within the sentence (AND logic)
         return Arrays.stream(keywords)
-                .allMatch(keyword -> lowerSentence.contains(keyword));
+                .allMatch(lowerSentence::contains);
     }
 
     /**
