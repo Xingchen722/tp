@@ -509,7 +509,7 @@ Furthermore, certain edits can cause Hired! to behave in unexpected ways (for ex
 ### Archiving data files `[coming in v6.0]`
 
 _Details coming soon ..._
- 
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
@@ -525,7 +525,7 @@ _Details coming soon ..._
 
 **Q**: Why are reminder colors not shown right after app startup?<br>
 **A**: Reminder highlighting is disabled by default. Run `reminder` once to enable and persist highlighting behavior.
- 
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Known issues
