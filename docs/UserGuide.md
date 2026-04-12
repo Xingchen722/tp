@@ -411,7 +411,7 @@ After
 * Edits the application at the specified `INDEX`.
 * The index refers to the index number shown in the displayed application list.
 * The index **must be a positive integer** `1, 2, 3, ...`
-* * The status is case-insensitive. e.g. `REJECTED` will turn out to be `rejected`
+* The status is case-insensitive. e.g. `REJECTED` will turn out to be `rejected`
 * Only status given above can be chosen.
 * Only one application can be changed at a time.
 * Status will appear as a tag in the UI.
