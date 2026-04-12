@@ -830,3 +830,10 @@ Action | Format, Examples
 2. Support export/import profiles for easier migration and backup workflows.
 3. Add optional automatic reminder refresh strategy (without requiring manual UI refresh actions).
 4. Provide clearer in-app error hints with concrete correction examples for invalid command input.
+5. **Richer `reminder` feedback messages:** Show different success text depending on what actually changed.
+
+   | Situation | Example message |
+   |-----------|-----------------|
+   | First `reminder` in the session, **or** the sorted order **changes** | `Sorted by deadline and refreshed reminder highlighting!` |
+   | Order **unchanged**, but reminder-relevant state **changes** (e.g. role colour crosses a rule as time passes; white → red within 3 days, red → overdue orange; or the **deadline value** changed since last refresh) | `Reminder status updated.` |
+   | **No change** to order or highlight state (nothing new to apply) | `Already up to date.` or `No changes to highlighting or sort order.` |
