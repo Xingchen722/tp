@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,19 @@ public class CommandBoxTest {
         }
         jfxToolkitAvailable = latch.await(5, TimeUnit.SECONDS);
         assertTrue(jfxToolkitAvailable);
+    }
+
+    @AfterAll
+    public static void shutdownJfxRuntime() throws Exception {
+        if (!jfxToolkitAvailable) {
+            return;
+        }
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            Platform.exit();
+            latch.countDown();
+        });
+        assertTrue(latch.await(5, TimeUnit.SECONDS));
     }
 
     @Test
