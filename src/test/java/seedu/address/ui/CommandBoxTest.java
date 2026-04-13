@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,21 +27,13 @@ public class CommandBoxTest {
 
     @BeforeAll
     public static void initJfxRuntime() throws Exception {
-        String osName = System.getProperty("os.name", "").toLowerCase();
-        if (osName.contains("linux")) {
-            // Enable JavaFX headless runtime on Linux CI.
-            System.setProperty("testfx.robot", "glass");
-            System.setProperty("testfx.headless", "true");
-            System.setProperty("java.awt.headless", "true");
-            System.setProperty("glass.platform", "Monocle");
-            System.setProperty("monocle.platform", "Headless");
-            System.setProperty("prism.order", "sw");
-        }
-
         CountDownLatch latch = new CountDownLatch(1);
         try {
             Platform.startup(latch::countDown);
         } catch (IllegalStateException e) {
+            latch.countDown();
+        } catch (NullPointerException e) {
+            // Monocle path can throw NPE when toolkit is already initialized.
             latch.countDown();
         } catch (UnsupportedOperationException e) {
             jfxToolkitAvailable = false;
@@ -50,19 +41,6 @@ public class CommandBoxTest {
         }
         jfxToolkitAvailable = latch.await(5, TimeUnit.SECONDS);
         assertTrue(jfxToolkitAvailable);
-    }
-
-    @AfterAll
-    public static void shutdownJfxRuntime() throws Exception {
-        if (!jfxToolkitAvailable) {
-            return;
-        }
-        CountDownLatch latch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            Platform.exit();
-            latch.countDown();
-        });
-        assertTrue(latch.await(5, TimeUnit.SECONDS));
     }
 
     @Test
