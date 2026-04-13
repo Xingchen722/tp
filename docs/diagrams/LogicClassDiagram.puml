@@ -10,14 +10,8 @@ package "Parser Classes" as ParserClasses {
 }
 
 class AddCommand
-class EditCommand
 class DeleteCommand
 class FindCommand
-class FindNoteCommand
-class StatusCommand
-class SortCommand
-class UndoCommand
-class RedoCommand
 class CommandResult
 class "{abstract}\nCommand" as Command
 
@@ -39,24 +33,12 @@ LogicManager .right.|> Logic
 LogicManager -right-> "1" ParserClasses
 
 ParserClasses ..> AddCommand : <<create>>
-ParserClasses ..> EditCommand : <<create>>
 ParserClasses ..> DeleteCommand : <<create>>
 ParserClasses ..> FindCommand : <<create>>
-ParserClasses ..> FindNoteCommand : <<create>>
-ParserClasses ..> StatusCommand : <<create>>
-ParserClasses ..> SortCommand : <<create>>
-ParserClasses ..> UndoCommand : <<create>>
-ParserClasses ..> RedoCommand : <<create>>
 
 AddCommand -up-|> Command
-EditCommand -up-|> Command
 DeleteCommand -up-|> Command
 FindCommand -up-|> Command
-FindNoteCommand -up-|> Command
-StatusCommand -up-|> Command
-SortCommand -up-|> Command
-UndoCommand -up-|> Command
-RedoCommand -up-|> Command
 
 LogicManager .left.> Command : <<call>>
 
@@ -66,7 +48,7 @@ Storage --[hidden] Model
 Command .[hidden]up.> Storage
 Command .right.> Model
 
-note right of AddCommand: Example concrete commands,\nnot an exhaustive list
+note right of FindCommand: Example concrete commands,\nnot an exhaustive list
 
 Logic ..> CommandResult
 LogicManager .down.> CommandResult
