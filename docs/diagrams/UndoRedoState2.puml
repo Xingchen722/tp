@@ -4,18 +4,18 @@ skinparam ClassFontColor #000000
 skinparam ClassBorderColor #000000
 skinparam ClassBackgroundColor #FFFFAA
 
-title After command "add"
+title After command "add r/Software Engineer p/98765432 e/hr@google.com c/Google l/Singapore t/interview"
 
 package States <<rectangle>> {
-    class State1 as "<u>s0:ApplicationList</u>"
-    class State2 as "<u>s1:ApplicationList</u>"
-    class State3 as "<u>s2:ApplicationList</u>"
+    class State1 as "<u>s0:ApplicationBookState</u>"
+    class State2 as "<u>s1:ApplicationBookState</u>"
+    class State3 as "<u>s2:ApplicationBookState</u>"
 }
 
 State1 -[hidden]right-> State2
 State2 -[hidden]right-> State3
 
-class Pointer as "Current State" #FFFFFF
+class Pointer as "currentStatePointer" #FFFFFF
 
 Pointer -up-> State3
 @enduml

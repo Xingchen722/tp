@@ -551,6 +551,10 @@ This subsection explains how **`reminder`** interacts with **`undo`** and **`red
 | 6 | `undo` | Reverts step 4 (the latest **effective** reminder checkpoint), not step 5 (which had no new checkpoint). |
 | 7 | `undo` | Reverts step 3 (`deadline`). |
 | 8 | `undo` | Reverts step 1 (the earlier **effective** reminder checkpoint). |
+| 9 | `add ...` *(new row stays at bottom)* **or** `delete LAST_INDEX` *(removes last row)* | Data changes; creates an undo step. |
+| 10 | `undo` | Undoes step 9 and opens a redo opportunity. |
+| 11 | `reminder` | Here it is a **no-op** because step 9 only added/removed the last row without changing relative order among surviving rows (and highlighting is already on), so this `reminder` creates **no** new checkpoint and does **not** clear redo. |
+| 12 | `redo` | **Succeeds** and reapplies step 9. |
 
 In short: if you interleave many `reminder` calls, `undo` only lands on the ones that actually created checkpoints (first-time enable or order changed).
 
@@ -559,7 +563,9 @@ In short: if you interleave many `reminder` calls, `undo` only lands on the ones
 A new undo step is saved **only if** at least one of these is true (same as the app logic: first-time highlight **or** order changed):
 
 1. **Highlighting was off** before this `reminder` (you are turning it **on** for the first time).
-2. **The sorted order changes** — after `reminder` sorts by deadline, the list order is **different** from **immediately before** this command.
+2. **The sorted order changes** — after `reminder` sorts by deadline, the **relative top-to-bottom order of the same surviving applications** is different from immediately before this command.
+   * This means an actual reordering among existing rows.
+   * **Count-only changes** do **not** by themselves count as “sorted order changes” (e.g. earlier `add`/`delete` where the added/removed item is simply the last row before and after `reminder`).
 
 Otherwise (highlighting **already on** **and** order **unchanged**), this `reminder` does **not** add another undo step.
 
