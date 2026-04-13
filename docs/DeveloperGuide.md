@@ -15,7 +15,7 @@ title: Developer Guide
 ## **Setting up, getting started**
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
- 
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Design**
@@ -145,7 +145,7 @@ The `Storage` component,
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
- 
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Implementation**
@@ -605,7 +605,7 @@ The ApplicationEvent system includes comprehensive tests at multiple levels:
 - Type inference during deserialization
 - Backward compatibility with existing data
 
- 
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
