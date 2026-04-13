@@ -139,7 +139,7 @@ Each card has an index based on the **currently displayed list**.
 Index-based commands such as `edit`, `delete`, `status`, `deadline`, `resume`, and `removeevent` always use the displayed indexes, not a permanent index.
 
 ### Event button
-If an application has an online assessment attached, a **View Event** button will appear on its card. Clicking it opens a window showing the full assessment details.
+If an application has an attached event (such as an online assessment or interview), a **View Event** button will appear on its card. Clicking it opens a window showing the full event details.
 
 ### Reminder highlighting
 After you run `reminder` at least once, Hired! can highlight application roles based on deadline urgency:
@@ -300,10 +300,13 @@ Format: `add r/ROLE p/PHONE e/EMAIL c/COMPANY_NAME [l/COMPANY_LOCATION] [t/TAG].
 > **Note:** In Hired!,
 > * `r/` is used for the internship role,
 > * `p/` is used for the recruiter or company contact phone number,
+> * `e/` is used for the recruiter or HR email address,
 > * `c/` is used for the company name, and
 > * `l/` (optional) is used for the company location.
 >
-> > Phone numbers are intentionally not restricted to a fixed length, as valid phone number lengths and formats vary across countries.
+> **Email format:** `e/` must be a valid email address in the form `name@example.com`.
+> 
+>  Phone numbers are intentionally not restricted to a fixed length, as valid phone number lengths and formats vary across countries.
 >
 > Applications are considered duplicates (and cannot be added) only when they have the same identity:
 > 1) the same `role`,
@@ -365,7 +368,7 @@ Finds applications whose roles contain all given keywords.
 Format: `find KEYWORD [MORE_KEYWORDS]`
 
 * The search is case-insensitive. e.g. `engineer` will match `Engineer`
-* The order of the keywords matters. e.g. `soft eng` will match `Software Engineer`.
+* The order of the keywords does not matter. e.g. both `find software engineer` and `find engineer software` can match `Software Engineer`.
 * Only the role is searched.
 * Partial words will also be matched. e.g. `eng` will match `Engineer`
 * Applications matching all keywords will be returned, if given more than 1 keyword (i.e. `AND` search).
@@ -645,7 +648,7 @@ Format: `openresume INDEX`
 * The index **must be a positive integer** `1, 2, 3, ...`
 
 Examples:
-* `openresume 2` will open your resume of the first application in the default way.
+* `openresume 2` will open the resume of the second application in the default way.
 
 ### Removing your resume : `removeresume`
 
