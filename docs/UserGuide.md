@@ -464,55 +464,119 @@ Examples:
 
 ### Identifying urgent applications : `reminder`
 
-Identifies and highlights applications according to how close their `deadline` is to the current local time.
-This feature is UI-only: it does **not** add or remove any tags.
+`reminder` does two things at once: it **sorts** the list by interview/application `deadline` (nearest first) and **turns on** deadline-based highlighting for `role` text (and the calendar icon).
 
 Format: `reminder`
 
-* After executing `reminder`, the application list is re-sorted by `deadline` in ascending order (nearest first).
-* Applications with no deadline (i.e. deadline is `-` / "No deadline set") are placed at the bottom and are not highlighted.
-* Highlighting is based on the comparison between each application's `deadline` and your current local time:
-    * **Red** `role` text: the deadline is within the next **3 days**, including today.
-    * ![reminder_red.png](reminder_red.png)
-    * **Orange** `role` text: the deadline is already **in the past** (i.e. earlier than the current local time).
-    * ![reminder_orange.png](reminder_orange.png)
-    * Otherwise, `role` keeps the default color (white).
-    * ![reminder_default.png](reminder_default.png)
-* Once you have executed `reminder`, the highlighting preference is saved, so restarting the app will keep the red/orange coloring behaviour.
-* Before you run `reminder` at least once, reminder highlighting is disabled and `role`/calendar colors stay at default.
-* Re-running `reminder` repeatedly without any meaningful change (e.g., highlighting already enabled and deadline order unchanged) is treated as a single effective reminder state in undo/redo history.
-    * Practical effect: if you entered `reminder` many times in a row, `undo` usually only needs to cross the first effective `reminder` state once to turn highlighting off.
-* Deadline format affects how the comparison is done:
-    * If you enter `deadline` as `yyyy-MM-dd`, it is treated as a date and compared using the day window (end of day is handled implicitly for highlighting).
-    * If you enter `deadline` as `yyyy-MM-dd HH:mm`, the comparison is accurate to **minutes**.
-* Interaction with `deadline` and `edit`:
-    * If you change a deadline using `deadline INDEX DATE_TIME` or `edit INDEX d/DATE_TIME`, the UI will re-render and the `role` color will immediately reflect the updated deadline (red/orange based on current local time).
-    * The **list order** is re-sorted by deadline **only** when you run either:
-        * `reminder`, or
-        * `sort time`.
+#### What you need to remember
 
-* Updating color at an exact time point (datetime `yyyy-MM-dd HH:mm`):
-    * **Precondition:** You have already executed `reminder` at least once in this application (otherwise the highlighting is kept disabled and the `role`/calendar icon will stay at default colors until you run `reminder`).
-    * Suppose your current local time is `2026-04-02 15:48` and you set an application deadline to `2026-04-02 15:48` (using `deadline INDEX 2026-04-02 15:48` or `edit INDEX d/2026-04-02 15:48`).
-    * After setting the deadline:
-        * If the current time is still within the same minute (e.g. `15:48:00`), the deadline is **not considered overdue yet** and the `role` stays **red**.
-    * After the deadline minute has passed (e.g. `15:48:01` or any time after that), the deadline becomes **overdue** per the rule above.
-    * To make the UI apply the new color at that moment:
-        * Click the corresponding application list item (the big box / card area of that `INDEX`) so that the UI re-renders that card, **or**
-        * Enter `reminder`.
-    * Note: this action refreshes **colors** (to reflect the newly overdue deadline).
+1. **First run matters:** Highlighting is **off** until you use `reminder` at least once. After that, the choice is **saved** (survives restart).
+2. **Colors vs order:** If you change a deadline with `deadline INDEX DATE_TIME` or `edit INDEX d/DATE_TIME`, the **colors** will update immediately when the list re-renders, but the **row order** only updates when you run **`reminder`** or **`sort time`** again.
+3. **No deadline:** Entries whose deadline is `-` / "No deadline set" sit at the bottom and are not highlighted.
+
+#### Role colors (after highlighting is enabled)
+
+| Color | Rule (vs your **local** time) |
+|--------|--------------------------------|
+| **Red** | Deadline is within the **next 3 days**, including today. |
+| **Orange** | Deadline is **already past**. |
+| **White (default)** | Anything else (e.g. farther away). |
+
+* ![reminder_red.png](reminder_red.png) Red example
+* ![reminder_orange.png](reminder_orange.png) Orange example
+* ![reminder_default.png](reminder_default.png) Default example
+
+#### Deadline format (how rules are applied)
+
+* **`yyyy-MM-dd` only:** Compared as a **date** (day window; useful for “whole day” deadlines).
+* **`yyyy-MM-dd HH:mm`:** Compared to the **minute** (for exact times).
+
+#### Exact clock time (datetime `yyyy-MM-dd HH:mm`)
+
+These rules apply when the deadline includes a **time** (minute precision).
+
+* **Precondition:** You have run **`reminder` at least once** in this app session (or saved prefs from before). Until then, highlighting stays off and `role`/calendar icons stay at default colors.
+* **Example setup:** Suppose your current local time is `2026-04-02 15:48` and you set an application’s deadline to `2026-04-02 15:48` (via `deadline INDEX 2026-04-02 15:48` or `edit INDEX d/2026-04-02 15:48`).
+* **Still inside the same minute:** e.g. clock shows `15:48:00` — the deadline is **not** treated as overdue yet; the `role` stays **red** (within the 3‑day window rule).
+* **After that minute has passed:** e.g. `15:48:01` or any later time — the deadline becomes **overdue** → **orange** `role` (per the rules above).
+* **No background timer:** The UI does **not** auto-flip colors at the exact second. When real time crosses into “overdue”, refresh colors by either:
+    * clicking that application’s **card** (the big row for that `INDEX`), **or**
+    * running **`reminder`** again.
+* **What this refreshes:** Colors only (to show overdue vs urgent). 
+
+#### Reminder-specific `undo` / `redo` behaviour
+
+This subsection explains how **`reminder`** interacts with **`undo`** and **`redo`** (list order and highlight state). For general command formats and rules, see [Undoing previous commands : `undo`](#undoing-previous-commands--undo) and [Redoing undone commands : `redo`](#redoing-undone-commands--redo) below.
+
+`undo` / `redo` can restore **both** list order and the reminder highlight toggle. Repeated `reminder` with nothing meaningful changing may count as **one** step in history — one `undo` can turn highlighting off in that situation.
+
+**Walkthrough 1 — `reminder` is the first time you turn highlighting on (it was off before):**
+
+| Step | What you type | What happens (simplified) |
+|------|----------------|---------------------------|
+| 1 | `add` … | New application(s); each `add` is usually its own undo step. |
+| 2 | `add` … | (Same as above.) |
+| 3 | `reminder` **(1st time)** | Highlighting turns **on**, list sorts by deadline — **this** creates the undo checkpoint for “reminder is on + this order”. |
+| 4 | `reminder` `reminder` `reminder` … | If nothing about deadlines/order **meaningfully** changes, these often **do not** add extra undo steps on top of step 3. |
+| 5 | `undo` | Goes back across that **one** reminder-related checkpoint → highlighting turns **off**, list order goes back to **before** step 3 (other earlier steps like `add` may still be there depending on your full history). |
+| 6 | `redo` | Re-applies what you undid in step 5 → highlighting **on** again and list sorted like after step 3. |
+
+*Walkthrough 1 is easiest to read if you picture “`add` → `add` → first `reminder` → more `reminder`s” with nothing else in between; `undo` always moves back **one history step at a time**, so if you did other commands after that, the first `undo` might hit those first.*
+
+**Walkthrough 2 — highlighting is already on (`reminder` is *not* the first time; e.g. you enabled it earlier or restarted with saved prefs):**
+
+| Step | What you type | What happens (simplified) |
+|------|----------------|---------------------------|
+| 1 | (Highlighting already **on**.) | — |
+| 2 | `add` … | New application; creates an undo step. |
+| 3 | `reminder` `reminder` `reminder` … | If the sorted order **does not** change, these may create **no** new undo step. |
+| 4 | `undo` | Undoes the **last command that actually wrote to undo history** — often step 2’s `add`, so the new row disappears; **highlighting can stay on** because those `reminder`s did not add a separate step to undo. |
+| 5 | `redo` | Re-applies what step 4 undid (e.g. restores the `add`). |
+
+#### When `reminder` commits (undoable)
+
+A new undo step is saved **only if** at least one of these is true (same as the app logic: first-time highlight **or** order changed):
+
+1. **Highlighting was off** before this `reminder` (you are turning it **on** for the first time).
+2. **The sorted order changes** — after `reminder` sorts by deadline, the list order is **different** from **immediately before** this command.
+
+Otherwise (highlighting **already on** **and** order **unchanged**), this `reminder` does **not** add another undo step.
+
+**Color** changes alone (e.g. red ↔ orange ↔ white as real time passes) do **not** count — they are recomputed in the UI and do **not** add an undo step by themselves.
+
+*(Overall, undo remembers only about the **last 10** steps.)*
 
 ### Sorting applications : `sort`
 
 Sorts the current list of applications based on a specified criterion.
 
-Format: `sort [CRITERION]`
+Format: `sort CRITERION`
 
 * The `CRITERION` is required and must be either `time` or `alphabet`.
 * `sort time`: Sorts applications by their deadline (nearest first). Applications without deadlines are placed at the bottom.
 * `sort alphabet`: Sorts applications alphabetically by their role name (A-Z).
+* **Ties (same deadline, or same role):**
+  * Hired! does **not** use a second key (e.g. company name) to break ties.
+  * If two rows are equal for the criterion you chose, their order is **stable**: they keep the **same relative order as in the list right before this `sort`**.
+  * That order is **not** always “order added to Hired!” — commands like `reminder`, `sort`, `find`, or `edit` can change the list you see.
 
-Examples:
+    **Example A — `sort alphabet`**
+
+    1. **Before** `sort alphabet` (top → bottom):
+       1. `Software Engineer` — Google  
+       2. `Software Engineer` — Meta  
+       3. `Data Analyst` — …
+    2. **After** `sort alphabet`:
+    * `Data Analyst` moves to the top (alphabetically before “Software Engineer”).
+    * The two `Software Engineer` rows stay **Google, then Meta** — they are **not** re-ordered by company name.
+
+    **Example B — `sort time`**
+
+    1. Two applications share the **same** deadline value.
+    2. **After** `sort time`, those two stay in the **same top-to-bottom order** they had **immediately before** you ran the command.
+
+Examples (commands to try):
+
 * `sort time`
 * `sort alphabet`
 
@@ -537,8 +601,10 @@ Reverses the most recent `undo` command.
 Format: `redo`
 
 * You must perform at least one `undo` command before you can use `redo`.
-* If you attempt to redo when no undoable state exists, an error message "No undoable state to redo. Please perform an undo first." will be shown.
-* If you execute a data-modifying command (e.g.,`add`) after an undo, the `redo` **history** is cleared.
+* **`redo` only works while no new data has been saved after that `undo`.** Any command that **modifies stored application data** and writes to undo history (e.g. `edit`, `add`, `delete`, `reminder` when it commits, `sort`, …) run **after** an `undo` will **clear** the redo branch — then `redo` fails until you `undo` again. This is **by design** (same as moving forward on a branch, then making a new edit).
+* Commands that **only** change the displayed list or view (e.g. `list`, `find`, `findnote`) do **not** clear redo; they may appear between `undo` and `redo`.
+* If you attempt to redo when no redoable state exists, an error message "No undoable state to redo. Please perform an undo first." will be shown.
+* **Concrete sequence (expected failure):** `edit 1 t/tag` → `undo` → `edit 1 t/tagag` → `redo` — the last `redo` **does not** re-apply the first edit; the second `edit` replaced the redo opportunity.
 
 Examples:
 * clear followed by `undo` (restores data), then `redo` (clears data again).
@@ -761,9 +827,9 @@ Action | Format, Examples
 **Status** | `status INDEX s/STATUS` <br> e.g. `status 2 s/offered`
 **Deadline** | `deadline INDEX DATE_TIME` <br> e.g. `deadline 1 2026-12-31 23:59`
 **Reminder** | `reminder` <br> Re-sorts by deadline (nearest first) and highlights the `role` color based on current local time: red within 3 days (incl. today), orange if overdue, default is white.
-**Sort** | `sort [CRITERION]` <br> CRITERION: `time` or `alphabet` <br> e.g. `sort time`, `sort alphabet`
+**Sort** | `sort CRITERION` <br> CRITERION: `time` or `alphabet` <br> e.g. `sort time`, `sort alphabet`
 **Undo** | `undo` <br> Reverts the most recent data-modifying command (up to 10 steps).
-**Redo** | `redo` <br> Reapplies the most recently undone command.
+**Redo** | `redo` <br> Reapplies the most recently undone command. Invalid if any data-modifying command ran after that `undo` (e.g. `edit` → `undo` → `edit` → `redo` fails).
 **Resume** | `resume INDEX rp/RESUME_PATH` <br> Attaches a resume to a specific application.
 **Open Resume** | `openresume INDEX` <br> Opens a resume of a specific application.
 **Remove Resume** | `removeresume INDEX` <br> Removes a resume of a specific application.
@@ -780,3 +846,10 @@ Action | Format, Examples
 2. Support export/import profiles for easier migration and backup workflows.
 3. Add optional automatic reminder refresh strategy (without requiring manual UI refresh actions).
 4. Provide clearer in-app error hints with concrete correction examples for invalid command input.
+5. **Richer `reminder` feedback messages:** Show different success text depending on what actually changed.
+
+   | Situation | Example message |
+   |-----------|-----------------|
+   | First `reminder` in the session, **or** the sorted order **changes** | `Sorted by deadline and refreshed reminder highlighting!` |
+   | Order **unchanged**, but reminder-relevant state **changes** (e.g. role colour crosses a rule as time passes; white → red within 3 days, red → overdue orange; or the **deadline value** changed since last refresh) | `Reminder status updated.` |
+   | **No change** to order or highlight state (nothing new to apply) | `Already up to date.` or `No changes to highlighting or sort order.` |
