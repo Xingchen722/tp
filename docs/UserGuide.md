@@ -306,7 +306,9 @@ Format: `add r/ROLE p/PHONE e/EMAIL c/COMPANY_NAME [l/COMPANY_LOCATION] [t/TAG].
 >
 > **Email format:** `e/` must be a valid email address in the form `name@example.com`.
 >
->  Phone numbers are intentionally not restricted to a fixed length, as valid phone number lengths and formats vary across countries.
+> **Email length:** Hired! does **not** impose an additional maximum character limit on `e/`; as long as the email format is valid, it is accepted.
+>
+> **Phone format (`p/`)**: Phone numbers must contain **digits only** and be **3 to 17 digits** long. Spaces, `+`, parentheses, and other symbols are not accepted.
 >
 > Applications are considered duplicates (and cannot be added) only when they have the same identity:
 > 1) the same `role`,
