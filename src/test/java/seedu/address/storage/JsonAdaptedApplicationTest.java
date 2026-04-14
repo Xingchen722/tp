@@ -1,24 +1,32 @@
 package seedu.address.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.storage.JsonAdaptedApplication.MISSING_FIELD_MESSAGE_FORMAT;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalApplications.META_DA;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.application.Company;
+import seedu.address.model.application.Deadline;
 import seedu.address.model.application.HrEmail;
 import seedu.address.model.application.Interview;
+import seedu.address.model.application.Note;
+import seedu.address.model.application.OnlineAssessment;
 import seedu.address.model.application.Phone;
+import seedu.address.model.application.Resume;
 import seedu.address.model.application.Role;
 import seedu.address.model.application.Status;
+import seedu.address.model.tag.Tag;
 
 public class JsonAdaptedApplicationTest {
     private static final String INVALID_ROLE = "R@chel";
@@ -216,5 +224,93 @@ public class JsonAdaptedApplicationTest {
                 VALID_COMPANY_LOCATION, invalidTags, VALID_STATUS, VALID_DEADLINE,
                 null, null, null, null, null, null, null, VALID_NOTE, VALID_RESUME);
         assertThrows(IllegalValueException.class, application::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidCompanyLocation_throwsIllegalValueException() {
+        JsonAdaptedApplication application = new JsonAdaptedApplication(
+                VALID_ROLE, VALID_PHONE, VALID_HREMAIL, VALID_COMPANY_NAME,
+                "@@@", VALID_TAGS, VALID_STATUS, VALID_DEADLINE,
+                null, null, null, null, null, null, null, VALID_NOTE, VALID_RESUME);
+        String expectedMessage = Company.MESSAGE_CONSTRAINTS_LOCATION;
+        assertThrows(IllegalValueException.class, expectedMessage, application::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullTags_defaultsToEmptyTagSet() throws Exception {
+        JsonAdaptedApplication application = new JsonAdaptedApplication(
+                VALID_ROLE, VALID_PHONE, VALID_HREMAIL, VALID_COMPANY_NAME,
+                VALID_COMPANY_LOCATION, null, VALID_STATUS, VALID_DEADLINE,
+                null, null, null, null, null, null, null, VALID_NOTE, VALID_RESUME);
+        assertTrue(application.toModelType().getTags().isEmpty());
+    }
+
+    @Test
+    public void toModelType_nullDeadlineNoteResume_defaultsApplied() throws Exception {
+        JsonAdaptedApplication application = new JsonAdaptedApplication(
+                VALID_ROLE, VALID_PHONE, VALID_HREMAIL, VALID_COMPANY_NAME,
+                VALID_COMPANY_LOCATION, VALID_TAGS, VALID_STATUS, null,
+                null, null, null, null, null, null, null, null, null);
+        seedu.address.model.application.Application result = application.toModelType();
+        assertEquals(Deadline.getEmptyDeadline(), result.getDeadline());
+        assertEquals(new Note(""), result.getNote());
+        assertEquals(Resume.getEmptyResume(), result.getResume());
+    }
+
+    @Test
+    public void toModelType_partialEventFields_noEventCreated() throws Exception {
+        JsonAdaptedApplication application = new JsonAdaptedApplication(
+                VALID_ROLE, VALID_PHONE, VALID_HREMAIL, VALID_COMPANY_NAME,
+                VALID_COMPANY_LOCATION, VALID_TAGS, VALID_STATUS, VALID_DEADLINE,
+                "home", null, "HackerRank",
+                "www.hackerrank.com", null, null, null, VALID_NOTE, VALID_RESUME);
+        assertNull(application.toModelType().getApplicationEvent());
+    }
+
+    @Test
+    public void constructorFromApplication_onlineAssessment_roundTrips() throws Exception {
+        Set<Tag> tags = new HashSet<>();
+        tags.add(new Tag("test"));
+        seedu.address.model.application.Application source = new seedu.address.model.application.Application(
+                new Role("Software Engineer"),
+                new Phone("98765432"),
+                new HrEmail("hr@google.com"),
+                new Company("Google", "Singapore"),
+                tags,
+                Status.APPLIED,
+                new Deadline("2026-12-31 23:59"),
+                new OnlineAssessment("home",
+                        java.time.LocalDateTime.parse("2026-12-31T23:59"),
+                        "HackerRank", "www.hackerrank.com"),
+                new Note("n"),
+                new Resume(""));
+        JsonAdaptedApplication adapted = new JsonAdaptedApplication(source);
+        seedu.address.model.application.Application model = adapted.toModelType();
+        assertTrue(model.getApplicationEvent() instanceof OnlineAssessment);
+    }
+
+    @Test
+    public void constructorFromApplication_interviewEmptyOptional_roundTrips() throws Exception {
+        Set<Tag> tags = new HashSet<>();
+        tags.add(new Tag("test"));
+        seedu.address.model.application.Application source = new seedu.address.model.application.Application(
+                new Role("Software Engineer"),
+                new Phone("98765432"),
+                new HrEmail("hr@google.com"),
+                new Company("Google", "Singapore"),
+                tags,
+                Status.APPLIED,
+                new Deadline("2026-12-31 23:59"),
+                new Interview("Google HQ",
+                        java.time.LocalDateTime.parse("2026-12-31T23:59"),
+                        "", ""),
+                new Note("n"),
+                new Resume(""));
+        JsonAdaptedApplication adapted = new JsonAdaptedApplication(source);
+        seedu.address.model.application.Application model = adapted.toModelType();
+        assertTrue(model.getApplicationEvent() instanceof Interview);
+        Interview interview = (Interview) model.getApplicationEvent();
+        assertEquals("", interview.getInterviewerName());
+        assertEquals("", interview.getInterviewType());
     }
 }
