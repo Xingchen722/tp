@@ -15,6 +15,7 @@ import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_APPLICATION;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -33,7 +34,12 @@ import seedu.address.testutil.EditApplicationDescriptorBuilder;
  */
 public class EditCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private Model model;
+
+    @BeforeEach
+    public void setUp() {
+        model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    }
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
@@ -73,6 +79,57 @@ public class EditCommandTest {
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setApplication(lastApplication, editedApplication);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_editNoteOnly_success() {
+        Application firstApp = model.getFilteredApplicationList().get(INDEX_FIRST_APPLICATION.getZeroBased());
+        Application editedApplication = new ApplicationBuilder(firstApp).withNote("Updated internship notes").build();
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_APPLICATION,
+                new EditApplicationDescriptorBuilder().withNote("Updated internship notes").build());
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICATION_SUCCESS,
+                Messages.format(editedApplication));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setApplication(firstApp, editedApplication);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_editDeadline_success() {
+        Application firstApp = model.getFilteredApplicationList().get(INDEX_FIRST_APPLICATION.getZeroBased());
+        Application editedApplication = new ApplicationBuilder(firstApp).withDeadline("2027-06-01").build();
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_APPLICATION,
+                new EditApplicationDescriptorBuilder().withDeadline("2027-06-01").build());
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICATION_SUCCESS,
+                Messages.format(editedApplication));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setApplication(firstApp, editedApplication);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_clearDeadline_success() {
+        Application firstApp = model.getFilteredApplicationList().get(INDEX_FIRST_APPLICATION.getZeroBased());
+        Application editedApplication = new ApplicationBuilder(firstApp).withDeadline("-").build();
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_APPLICATION,
+                new EditApplicationDescriptorBuilder().withDeadline("-").build());
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_APPLICATION_SUCCESS,
+                Messages.format(editedApplication));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setApplication(firstApp, editedApplication);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }

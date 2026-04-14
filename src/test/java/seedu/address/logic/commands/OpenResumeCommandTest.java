@@ -8,6 +8,8 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_APPLICATION;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_APPLICATION;
 
+import java.awt.Desktop;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -74,6 +76,36 @@ public class OpenResumeCommandTest {
         OpenResumeCommand command = new OpenResumeCommand(Index.fromOneBased(1));
 
         assertThrows(CommandException.class, OpenResumeCommand.MESSAGE_FILE_NOT_FOUND, () -> command.execute(model));
+    }
+
+    @Test
+    public void execute_resumePathIsDirectory_throwsCommandException() throws Exception {
+        Path dir = tempDir.resolve("resume.pdf");
+        Files.createDirectories(dir);
+        Application application = createApplication(dir.toString());
+        ModelStub model = new ModelStub(application);
+
+        OpenResumeCommand command = new OpenResumeCommand(Index.fromOneBased(1));
+
+        assertThrows(CommandException.class, OpenResumeCommand.MESSAGE_FILE_NOT_FOUND, () -> command.execute(model));
+    }
+
+    @Test
+    public void execute_existingResumeFile_desktopDependentOutcome() throws Exception {
+        Path resumeFile = tempDir.resolve("resume.pdf");
+        Files.writeString(resumeFile, "dummy");
+        Application application = createApplication(resumeFile.toAbsolutePath().toString());
+        ModelStub model = new ModelStub(application);
+
+        OpenResumeCommand command = new OpenResumeCommand(Index.fromOneBased(1));
+
+        if (!Desktop.isDesktopSupported()) {
+            assertThrows(CommandException.class, OpenResumeCommand.MESSAGE_DESKTOP_NOT_SUPPORTED, () ->
+                    command.execute(model));
+        } else {
+            CommandResult result = command.execute(model);
+            assertTrue(result.getFeedbackToUser().contains("Opened resume"));
+        }
     }
 
     @Test

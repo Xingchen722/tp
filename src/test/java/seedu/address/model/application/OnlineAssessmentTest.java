@@ -1,6 +1,8 @@
 package seedu.address.model.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
@@ -75,9 +77,40 @@ public class OnlineAssessmentTest {
     }
 
     @Test
-    public void getNotes_customNotes_returnsCorrectNotes() {
-        OnlineAssessment oa = new OnlineAssessment("home", VALID_DATETIME,
+    public void constructor_fiveArgNotesIgnoredForEquality() {
+        OnlineAssessment fiveArg = new OnlineAssessment("home", VALID_DATETIME,
                 "HackerRank", "www.hackerrank.com", "custom notes");
+        OnlineAssessment fourArg = new OnlineAssessment("home", VALID_DATETIME,
+                "HackerRank", "www.hackerrank.com");
+        assertEquals(fiveArg, fourArg);
+    }
+
+    @Test
+    public void equals_sameValues_returnsTrue() {
+        OnlineAssessment a = new OnlineAssessment("home", VALID_DATETIME, "HR", "x.com");
+        OnlineAssessment b = new OnlineAssessment("home", VALID_DATETIME, "HR", "x.com");
+        assertEquals(a, b);
+        assertEquals(a, a);
+    }
+
+    @Test
+    public void equals_differentLink_returnsFalse() {
+        OnlineAssessment a = new OnlineAssessment("home", VALID_DATETIME, "HR", "a.com");
+        OnlineAssessment b = new OnlineAssessment("home", VALID_DATETIME, "HR", "b.com");
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    public void equals_differentType_returnsFalse() {
+        OnlineAssessment oa = new OnlineAssessment("home", VALID_DATETIME, "HR", "a.com");
+        Interview interview = new Interview("home", VALID_DATETIME);
+        assertFalse(oa.equals(interview));
+    }
+
+    @Test
+    public void equals_null_returnsFalse() {
+        OnlineAssessment oa = new OnlineAssessment("home", VALID_DATETIME, "HR", "a.com");
+        assertNotEquals(null, oa);
     }
 
     @Test

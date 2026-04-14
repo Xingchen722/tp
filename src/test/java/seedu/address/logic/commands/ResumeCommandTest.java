@@ -115,6 +115,28 @@ public class ResumeCommandTest {
     }
 
     @Test
+    public void execute_invalidPathCharacters_throwsCommandException() {
+        Application original = createApplication("");
+        ModelStub model = new ModelStub(original);
+
+        Resume resume = new Resume("bad\u0000resume.pdf");
+        ResumeCommand command = new ResumeCommand(Index.fromOneBased(1), resume);
+
+        assertThrows(CommandException.class, ResumeCommand.MESSAGE_INVALID_PATH, () -> command.execute(model));
+    }
+
+    @Test
+    public void execute_resumePathIsDirectory_throwsCommandException() throws Exception {
+        Path dir = Files.createDirectories(tempDir.resolve("resume.pdf"));
+        Application original = createApplication("");
+        ModelStub model = new ModelStub(original);
+
+        ResumeCommand command = new ResumeCommand(Index.fromOneBased(1), new Resume(dir.toString()));
+
+        assertThrows(CommandException.class, ResumeCommand.MESSAGE_FILE_NOT_FOUND, () -> command.execute(model));
+    }
+
+    @Test
     public void equals() {
         ResumeCommand firstCommand = new ResumeCommand(
                 Index.fromOneBased(1),
