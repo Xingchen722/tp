@@ -903,6 +903,7 @@ Related interactions with similar flow:
 
 * **Mainstream OS**: Windows, Linux, Unix, macOS
 * **Role**: The position/title applied for.
+* **Phone**: The recruiter/company contact number stored in an application. It must contain digits only, with length between 3 and 17.
 * **Status**: The current stage of an internship application (e.g. APPLIED, INTERVIEWING, OFFERED, REJECTED, WITHDRAWN).
 * **Company**: The organisation that offers the opportunity.
 * **Record**: One application entry in Hired!, including fields such as role, company, status, deadline, tags, note, and optional event details.
