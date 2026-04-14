@@ -48,7 +48,7 @@ This guide focuses on the commands and behaviours that matter most during normal
         * [Adding an application: `add`](#adding-an-application-add)
         * [Listing all applications : `list`](#listing-all-applications--list)
         * [Editing an application : `edit`](#editing-an-application--edit)
-        * [Locating applications by role: `find`](#locating-applications-by-role-find)
+        * [Locating applications: `find`](#locating-applications-find)
         * [Locating applications by note: `findnote`](#locating-applications-by-note-findnote)
         * [Changing an application's status: `status`](#changing-an-applications-status-status)
         * [Setting the deadline for an application : `deadline`](#setting-the-deadline-for-an-application--deadline)
@@ -167,13 +167,13 @@ Command:
 Expected result:
 A new application for `Software Engineer Intern` at `ExampleCorp` is added to the list.
 
-### Step 3: Find the application by role
+### Step 3: Find the application by role or company
 
 Command:
 `find software`
 
 Expected result:
-Only applications whose role contains `software` are shown.
+Applications whose **role** or **company name** contains `software` are shown.
 
 ### Step 4: Set a deadline
 
@@ -363,22 +363,23 @@ Examples:
 * `edit 1 note/Follow up next Monday` updates the note of the 1st application.
 * `edit 1 note/` clears the note of the 1st application.
 
-### Locating applications by role: `find`
+### Locating applications: `find`
 
-Finds applications whose roles contain any of the given keywords.
+Finds applications whose **role** or **company name** contains any of the given keywords.
 
 Format: `find KEYWORD [MORE_KEYWORDS]`
 
 * The search is case-insensitive. e.g. `engineer` will match `Engineer`
 * The order of the keywords does not matter. e.g. both `find software engineer` and `find engineer software` can match `Software Engineer`.
-* Only the role is searched.
+* Only the **role** and **company name** fields are searched (not phone, email, note, tags, or company location).
 * Partial words will also be matched. e.g. `eng` will match `Engineer`
 * Applications matching at least one keyword will be returned, if given more than 1 keyword (i.e. `OR` search).
 * At least one keyword must be provided (e.g. `find` alone is invalid).
 
 Examples:
-* `find engineer` returns applications with roles containing `engineer`
-* `find quant research` returns applications with roles containing `quant` or `research`
+* `find engineer` returns applications whose role or company name contains `engineer`
+* `find quant research` returns applications whose role or company name contains `quant` or `research`
+* `find google` returns applications whose company name contains `google` (even if the role text does not contain `google`)
 
 ### Locating applications by note: `findnote`
 
@@ -850,7 +851,7 @@ Action | Format, Examples
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g. `delete 3`
 **Edit** | `edit INDEX [r/ROLE] [p/PHONE] [e/EMAIL] [c/COMPANY_NAME] [l/COMPANY_LOCATION] [t/TAG]... [s/STATUS] [d/DEADLINE] [note/NOTE]`<br> e.g. `edit 1 s/OFFERED d/2026-12-31 23:59 note/Follow up next Monday`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g. `find engineer backend`
+**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g. `find engineer backend` (matches **role** or **company name**)
 **Find Note** | `findnote KEYWORD [MORE_KEYWORDS]`<br> e.g. `findnote recruiter follow`
 **List** | `list`
 **Status** | `status INDEX s/STATUS` <br> e.g. `status 2 s/offered`
@@ -875,14 +876,15 @@ Action | Format, Examples
 2. Support export/import profiles for easier migration and backup workflows.
 3. Add optional automatic reminder refresh strategy (without requiring manual UI refresh actions).
 4. Provide clearer in-app error hints with concrete correction examples for invalid command input.
-5. **Richer `reminder` feedback messages:** Show different success text depending on what actually changed.
+5. **Extend `find`:** Match **company location** and other fields (e.g. tags) with the same keyword style as today.
+6. **Richer `reminder` feedback messages:** Show different success text depending on what actually changed.
 
    | Situation | Example message |
    |-----------|-----------------|
    | First `reminder` in the session, **or** the sorted order **changes** | `Sorted by deadline and refreshed reminder highlighting!` |
    | Order **unchanged**, but reminder-relevant state **changes** (e.g. role colour crosses a rule as time passes; white → red within 3 days, red → overdue orange; or the **deadline value** changed since last refresh) | `Reminder status updated.` |
    | **No change** to order or highlight state (nothing new to apply) | `Already up to date.` or `No changes to highlighting or sort order.` |
-6. **Smarter Duplicate Detection for Applications:**
+7. **Smarter Duplicate Detection for Applications:**
    Currently, the duplicate detection mechanism only normalizes case and whitespace. As a result, it enforces strict equality and misses likely near-duplicates, such as entering "Shopee" versus "Shopee Pte Ltd", or "Google" versus "Google LLC".<br/>
    We plan to upgrade the isSameApplication logic to incorporate fuzzy matching or similarity thresholds. The system could normalize common company suffixes (e.g., "Pte Ltd", "LLC", "Inc.") before comparison. <br/>
    Alternatively, it could introduce a "soft warning" system where the app alerts the user about a highly similar existing entry and asks for explicit confirmation before proceeding with the addition. <br/>

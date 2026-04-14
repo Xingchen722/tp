@@ -658,7 +658,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *` | student applying for internships | list and view all applications | maintain overall visibility of my pipeline |
 | `* * *` | student applying for internships | edit any application fields | keep records accurate as information changes |
 | `* * *` | student applying for internships | delete wrong or obsolete application records | keep my list clean and relevant |
-| `* * *` | student applying for internships | search by role keywords (`find`) | quickly locate target opportunities |
+| `* * *` | student applying for internships | search by role or company name keywords (`find`) | quickly locate target opportunities |
 | `* * *` | student applying for internships | search by note keywords (`findnote`) | retrieve follow-up context efficiently |
 | `* * *` | student applying for internships | update status quickly (`status`) | track my progress stage clearly |
 | `* * *` | student applying for internships | set or clear deadlines (`deadline`) | avoid missing key submission timelines |
@@ -668,7 +668,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *` | student applying for internships | attach/open/remove a resume path per application | jump to supporting documents quickly |
 | `* *` | student applying for internships | record online assessment details and remove them later | prepare and manage OA schedules in one place |
 | `* *` | student applying for internships | record interview details with optional interviewer and type info | manage interview schedules with available context |
-| `* *` | student applying for internships | search by company name or role | quickly find a specific application |
+| `* *` | student applying for internships | search by company location, tags, or combined filters | quickly narrow the list beyond role and company name |
 | `* *` | student applying for internships | categorize companies by industry | organize applications more clearly |
 | `* *` | student applying for internships | tag companies by interest level | prioritize which opportunities to focus on |
 | `* *` | student applying for internships | remove events (assessments/interviews) when no longer needed | keep application records clean and current |
@@ -963,8 +963,8 @@ testers are expected to do more *exploratory* testing.
     2. Verify index-related error messages are shown and data remains unchanged.
 
 3. Find and findnote
-    1. Add at least two applications with different roles/notes.
-    2. Run `find engineer` and `findnote follow`.
+    1. Add at least two applications with different roles, company names, and notes.
+    2. Run `find engineer` (role substring), `find Google` (company name substring on sample data), and `findnote follow`.
     3. Verify only matching applications are shown.
 
 4. Status, deadline, reminder, sort
