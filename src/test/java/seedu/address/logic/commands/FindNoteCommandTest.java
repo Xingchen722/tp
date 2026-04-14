@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_APPLICATIONS_LISTED_OVERVIEW;
 import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
@@ -9,6 +9,7 @@ import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
 import java.util.Arrays;
 import java.util.Collections;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.Model;
@@ -19,8 +20,14 @@ import seedu.address.testutil.ApplicationBuilder;
 
 public class FindNoteCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-    private Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private Model model;
+    private Model expectedModel;
+
+    @BeforeEach
+    public void setUp() {
+        model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    }
 
     @Test
     public void equals() {
@@ -32,11 +39,34 @@ public class FindNoteCommandTest {
         FindNoteCommand findFirstCommand = new FindNoteCommand(firstPredicate);
         FindNoteCommand findSecondCommand = new FindNoteCommand(secondPredicate);
 
-        assertTrue(findFirstCommand.equals(findFirstCommand));
-        assertTrue(findFirstCommand.equals(new FindNoteCommand(firstPredicate)));
-        assertFalse(findFirstCommand.equals(1));
-        assertFalse(findFirstCommand.equals(null));
-        assertFalse(findFirstCommand.equals(findSecondCommand));
+        assertEquals(findFirstCommand, findFirstCommand);
+        assertEquals(findFirstCommand, new FindNoteCommand(firstPredicate));
+        assertNotEquals(findFirstCommand, null);
+        assertNotEquals(findFirstCommand, findSecondCommand);
+        assertNotEquals(findFirstCommand, new ClearCommand());
+    }
+
+    @Test
+    public void toStringMethod() {
+        NoteContainsKeywordsPredicate predicate =
+                new NoteContainsKeywordsPredicate(Collections.singletonList("follow"));
+        FindNoteCommand command = new FindNoteCommand(predicate);
+        String str = command.toString();
+        assertTrue(str.startsWith(FindNoteCommand.class.getCanonicalName() + "{"));
+        assertTrue(str.contains("predicate="));
+        assertTrue(str.endsWith("}"));
+    }
+
+    @Test
+    public void execute_keywordMatchesNote_listsMatchingApplications() {
+        NoteContainsKeywordsPredicate predicate = preparePredicate("mentorship");
+        FindNoteCommand command = new FindNoteCommand(predicate);
+        expectedModel.updateFilteredApplicationList(predicate);
+
+        String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW, 1);
+
+        assertEquals(expectedMessage, command.execute(model).getFeedbackToUser());
+        assertEquals(expectedModel.getFilteredApplicationList(), model.getFilteredApplicationList());
     }
 
     @Test
