@@ -69,6 +69,21 @@ public class FindNoteCommandTest {
         assertEquals(expectedModel.getFilteredApplicationList(), model.getFilteredApplicationList());
     }
 
+    @Test
+    public void execute_multipleKeywords_oneMatchingKeyword_returnsMatches() {
+        model.addApplication(new ApplicationBuilder().withRole("Intern C").withNote("Follow up with HR").build());
+        expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        NoteContainsKeywordsPredicate predicate = preparePredicate("follow zzznotfound");
+        FindNoteCommand command = new FindNoteCommand(predicate);
+        expectedModel.updateFilteredApplicationList(predicate);
+
+        String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW,
+                expectedModel.getFilteredApplicationList().size());
+        assertEquals(expectedMessage, command.execute(model).getFeedbackToUser());
+        assertEquals(expectedModel.getFilteredApplicationList(), model.getFilteredApplicationList());
+    }
+
     /**
      * Parses {@code userInput} into a {@code NoteContainsKeywordsPredicate}.
      */

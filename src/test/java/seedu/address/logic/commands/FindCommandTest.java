@@ -86,6 +86,17 @@ public class FindCommandTest {
     }
 
     @Test
+    public void execute_multipleKeywords_oneMatchingKeyword_returnsMatches() {
+        RoleContainsKeywordsPredicate predicate = preparePredicate("Engineer zzznotfound");
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredApplicationList(predicate);
+        String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW,
+                expectedModel.getFilteredApplicationList().size());
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(expectedModel.getFilteredApplicationList(), model.getFilteredApplicationList());
+    }
+
+    @Test
     public void toStringMethod() {
         RoleContainsKeywordsPredicate predicate = new RoleContainsKeywordsPredicate(Arrays.asList("keyword"));
         FindCommand findCommand = new FindCommand(predicate);
