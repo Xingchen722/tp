@@ -58,18 +58,16 @@ public class ApplicationTest {
         editedAlice = new ApplicationBuilder(GOOGLE_SWE).withRole(VALID_ROLE_BOB).build();
         assertFalse(GOOGLE_SWE.isSameApplication(editedAlice));
 
-        // ------------------- 以下是针对模糊匹配的修改 -------------------
-
-        // role differs in case -> 现在应该返回 true
+        // role differs in case
         Application editedBob = new ApplicationBuilder(BOB).withRole(VALID_ROLE_BOB.toLowerCase()).build();
         assertTrue(BOB.isSameApplication(editedBob));
 
-        // role has trailing spaces -> 现在应该返回 true
+        // role has trailing spaces
         String roleWithTrailingSpaces = VALID_ROLE_BOB + "  ";
         editedBob = new ApplicationBuilder(BOB).withRole(roleWithTrailingSpaces).build();
         assertTrue(BOB.isSameApplication(editedBob));
 
-        // role has internal multiple spaces -> 现在应该返回 true
+        // role has internal multiple spaces
         String roleWithInternalSpaces = "Software    Engineer";
         Application app1 = new ApplicationBuilder().withRole("Software Engineer").build();
         Application app2 = new ApplicationBuilder().withRole(roleWithInternalSpaces).build();
@@ -95,7 +93,7 @@ public class ApplicationTest {
     public void equals() {
         // same values -> returns true
         Application aliceCopy = new ApplicationBuilder(GOOGLE_SWE).build();
-        assertTrue(GOOGLE_SWE.equals(aliceCopy));
+        assertEquals(GOOGLE_SWE, aliceCopy);
 
         // same object -> returns true
         assertTrue(GOOGLE_SWE.equals(GOOGLE_SWE));

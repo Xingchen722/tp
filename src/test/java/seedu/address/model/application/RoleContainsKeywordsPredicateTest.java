@@ -75,10 +75,20 @@ public class RoleContainsKeywordsPredicateTest {
         predicate = new RoleContainsKeywordsPredicate(Arrays.asList("Carol"));
         assertFalse(predicate.test(new ApplicationBuilder().withRole("Alice Bob").build()));
 
-        // Keywords match phone, hrEmail and company, but does not match role
-        predicate = new RoleContainsKeywordsPredicate(Arrays.asList("12345", "alice@hrEmail.com", "Main", "Street"));
+        // Keywords match phone and email only, not role or company name
+        predicate = new RoleContainsKeywordsPredicate(Arrays.asList("12345", "alice@hrEmail.com"));
         assertFalse(predicate.test(new ApplicationBuilder().withRole("Alice").withPhone("12345")
-                .withHrEmail("alice@hrEmail.com").withCompany("Main Street").build()));
+                .withHrEmail("alice@hrEmail.com").withCompany("Acme").build()));
+    }
+
+    @Test
+    public void test_companyNameContainsKeyword_returnsTrue() {
+        RoleContainsKeywordsPredicate predicate =
+                new RoleContainsKeywordsPredicate(Collections.singletonList("goog"));
+        assertTrue(predicate.test(new ApplicationBuilder()
+                .withRole("Intern")
+                .withCompanyName("Google")
+                .build()));
     }
 
     @Test

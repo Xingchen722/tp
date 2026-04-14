@@ -7,7 +7,8 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that an {@code Application}'s {@code Role} matches any of the keywords given.
+ * Tests that an {@code Application}'s role or company name matches any of the keywords given
+ * (case-insensitive substring match).
  */
 public class RoleContainsKeywordsPredicate implements Predicate<Application> {
     private final List<String> keywords;
@@ -18,9 +19,11 @@ public class RoleContainsKeywordsPredicate implements Predicate<Application> {
 
     @Override
     public boolean test(Application application) {
+        String roleName = application.getRole().roleName;
+        String companyName = application.getCompany().companyName;
         return keywords.stream()
-                .anyMatch(keyword -> StringUtil
-                        .containsSubstringIgnoreCase(application.getRole().roleName, keyword));
+                .anyMatch(keyword -> StringUtil.containsSubstringIgnoreCase(roleName, keyword)
+                        || StringUtil.containsSubstringIgnoreCase(companyName, keyword));
     }
 
     @Override
