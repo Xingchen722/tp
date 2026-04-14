@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_APPLICATIONS_LISTED_OVERVIEW;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
@@ -31,13 +33,11 @@ public class FindNoteCommandTest {
         FindNoteCommand findFirstCommand = new FindNoteCommand(firstPredicate);
         FindNoteCommand findSecondCommand = new FindNoteCommand(secondPredicate);
 
-        assertEquals(findFirstCommand, findFirstCommand);
-        assertEquals(findFirstCommand, new FindNoteCommand(firstPredicate));
-        assertThrows(AssertionError.class, () -> {
-            throw new AssertionError();
-        });
-        org.junit.jupiter.api.Assertions.assertNotEquals(findFirstCommand, null);
-        org.junit.jupiter.api.Assertions.assertNotEquals(findFirstCommand, findSecondCommand);
+        assertTrue(findFirstCommand.equals(findFirstCommand));
+        assertTrue(findFirstCommand.equals(new FindNoteCommand(firstPredicate)));
+        assertFalse(findFirstCommand.equals(1));
+        assertFalse(findFirstCommand.equals(null));
+        assertFalse(findFirstCommand.equals(findSecondCommand));
     }
 
     @Test

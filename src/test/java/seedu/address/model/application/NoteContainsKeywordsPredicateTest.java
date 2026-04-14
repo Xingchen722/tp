@@ -16,7 +16,6 @@ public class NoteContainsKeywordsPredicateTest {
 
     @Test
     public void equals() {
-        // Equality case: same values, different values, different types, and null
         NoteContainsKeywordsPredicate firstPredicate =
                 new NoteContainsKeywordsPredicate(Collections.singletonList("follow"));
         NoteContainsKeywordsPredicate secondPredicate =
@@ -32,19 +31,6 @@ public class NoteContainsKeywordsPredicateTest {
         assertFalse(firstPredicate.equals(1));
 
         // null -> returns false
-        assertFalse(firstPredicate.equals(null));
-
-        // different values -> returns false
-        // Same object -> returns true
-        assertTrue(firstPredicate.equals(firstPredicate));
-
-        // Same values -> returns true
-        assertTrue(firstPredicate.equals(new NoteContainsKeywordsPredicate(Collections.singletonList("follow"))));
-
-        // Different type -> returns false
-        assertFalse(firstPredicate.equals(1));
-
-        // Null -> returns false
         assertFalse(firstPredicate.equals(null));
 
         // Different predicate -> returns false

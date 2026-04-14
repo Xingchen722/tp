@@ -46,7 +46,7 @@ public class SortCommandTest {
     }
 
     @Test
-    public void execute_sortByTime_success() throws CommandException { // 添加 throws
+    public void execute_sortByTime_success() throws CommandException {
         SortCommand sortCommand = new SortCommand("time");
         String expectedMessage = String.format(SortCommand.MESSAGE_SUCCESS, "time");
 

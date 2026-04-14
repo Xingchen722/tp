@@ -54,13 +54,24 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_zeroKeywords_noApplicationFound() {
+    public void execute_nonMatchingKeyword_noApplicationFound() {
         String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW, 0);
-        RoleContainsKeywordsPredicate predicate = preparePredicate(" ");
+        RoleContainsKeywordsPredicate predicate = preparePredicate("zzznotfound");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredApplicationList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.emptyList(), model.getFilteredApplicationList());
+    }
+
+    @Test
+    public void execute_singleKeyword_multipleApplicationsFound() {
+        RoleContainsKeywordsPredicate predicate = preparePredicate("Engineer");
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredApplicationList(predicate);
+        String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW,
+                expectedModel.getFilteredApplicationList().size());
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(expectedModel.getFilteredApplicationList(), model.getFilteredApplicationList());
     }
 
     @Test
