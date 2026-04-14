@@ -15,7 +15,7 @@ title: Developer Guide
 ## **Setting up, getting started**
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
- 
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Design**
@@ -92,7 +92,7 @@ Here's a (partial) class diagram of the `Logic` component:
 :information_source: **Note:** Only representative concrete `Command` subclasses are shown here (e.g., `AddCommand`, `DeleteCommand`, `FindCommand`) to keep the diagram readable. The diagram is not an exhaustive list of all command classes.
 </div>
 
-<img src="images/LogicClassDiagram.png" width="550"/>
+<img src="images/LogicClassDiagram.png" width="800" height="500"/>
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
 
@@ -145,7 +145,7 @@ The `Storage` component,
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
- 
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Implementation**
@@ -162,7 +162,9 @@ The undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `Ad
 * `VersionedAddressBook#undo()` — Restores the previous application book state from its history.
 * `VersionedAddressBook#redo()` — Restores a previously undone application book state from its history.
 
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()`, and `Model#redoAddressBook()`.
+
+In the current implementation, undo/redo also restores the reminder-highlight toggle state in `UserPrefs`. `ModelManager` maintains a parallel `reminderHighlightStateList` (with its own pointer) and updates it together with `VersionedAddressBook`, so `undo` / `redo` keeps both data state and reminder-highlight preference consistent.
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
@@ -174,7 +176,7 @@ Step 2. The user executes `delete 5` command to delete the 5th application in th
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
-Step 3. The user executes `add ...` to add a new application. The `add` command also calls `Model#commitAddressBook()`, causing another modified application book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add r/Software Engineer p/98765432 e/hr@google.com c/Google l/Singapore t/interview note/Met recruiter at career fair` to add a new application. The `add` command also calls `Model#commitAddressBook()`, causing another modified application book state to be saved into the `addressBookStateList`.
 
 ![UndoRedoState2](images/UndoRedoState2.png)
 
@@ -209,17 +211,13 @@ The `redo` command does the opposite — it calls `Model#redoAddressBook()`,
 
 </div>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+Step 5. The user then executes `list`. Commands that only change the current view (e.g. `list`, `find`, `findnote`) do not call `Model#commitAddressBook()`, so `addressBookStateList` remains unchanged. For `reminder`, only an **effective** run (first-time highlight enable, or sorted order actually changes) calls `Model#commitAddressBook()` and creates a new checkpoint; a no-op `reminder` does not.
 
 ![UndoRedoState4](images/UndoRedoState4.png)
 
 Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all application book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the previous `add` command after a new branch of changes. This is the behavior that most modern desktop applications follow.
 
 ![UndoRedoState5](images/UndoRedoState5.png)
-
-The following activity diagram summarizes what happens when a user executes a new command:
-
-<img src="images/CommitActivityDiagram.png" width="250" />
 
 #### Design considerations:
 
@@ -248,7 +246,7 @@ How the `reminder` command works:
 3. `ReminderCommand` enables UI highlighting via `ReminderHighlightState`.
 4. `ReminderCommand` reads and updates `UserPrefs` to persist the reminder highlight toggle.
 5. `ReminderCommand` sorts the application list by deadline.
-6. `ReminderCommand` commits the updated application book state through `Model#commitAddressBook()`.
+6. `ReminderCommand` calls `Model#commitAddressBook()` **only when the run is effective** (e.g. first-time highlight enable, or sorted order actually changes). A no-op `reminder` does not create a new undo/redo checkpoint.
 
 
 ## Sort Feature
@@ -607,7 +605,7 @@ The ApplicationEvent system includes comprehensive tests at multiple levels:
 - Type inference during deserialization
 - Backward compatibility with existing data
 
- 
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
@@ -774,7 +772,7 @@ Simple one-step interactions (e.g., `list`, `help`, `exit`) are covered by User 
 2. System validates date/time format and calendar validity.
 3. System saves the updated application.
 4. Student runs `reminder`.
-5. System sorts applications by deadline and enables urgency highlighting.
+5. System sorts applications by deadline and enables urgency highlighting; a new undo/redo checkpoint is created only if this `reminder` run is effective.
 6. System displays updated ordering and visual urgency cues.
 
    Use case ends.
@@ -881,23 +879,23 @@ Related interactions with similar flow:
 **Technical Requirements**
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
 2.  The system should operate as a standalone application without requiring an active internet connection.
-3.  The system must store all internship and contact data in a _local text file_ (JSON format) and must _not_ require the installation or use of any external Database Management System (e.g., MySQL, PostgreSQL).
+3.  The system must store all internship application data in a _local text file_ (JSON format) and must _not_ require the installation or use of any external Database Management System (e.g., MySQL, PostgreSQL).
 4.  The system must be developed using only standard Java `17` libraries and the JavaFX framework. Any third-party libraries must be less than `10MB` in total and must not require separate installation by the user.
 5.  The entire application must be packaged into a single executable JAR file not exceeding `100MB`. The user should be able to run it by simply double-clicking the file, provided Java `17` is installed.
 
 **Performance Requirements**
 1. Should be able to hold up to `1000` applications without a noticeable sluggishness in performance for typical usage.
-2. The system should respond to any valid user command (e.g., adding a company or filtering contacts) within `100` milliseconds under normal usage conditions.
+2. The system should respond to any valid user command (e.g., adding an application or finding applications) within `100` milliseconds under normal usage conditions.
 
 **Usability Requirements**
 1.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-2.  All critical features (creating an application, linking a contact) must be _executable entirely_ via keyboard without requiring mouse interaction.
+2.  All critical features (creating and updating an application record) must be _executable entirely_ via keyboard without requiring mouse interaction.
 3.  A tech-savvy user should be able to master the basic commands (Add, Find, List, Edit) within `10` minutes of reading the User Guide.
 
 **Reliability & Data Integrity**
 1. The system must _automatically_ save all changes to the local storage after every successful state-changing command (e.g., add, edit, delete) to prevent data loss in case of a crash or accidental exit.
 2. If a command involves multiple steps, the operation must be atomic. Either both changes are made correctly, or no changes are saved at all.
-3. A tech-savvy user should be able to open the data file in a standard text editor and understand the relationships between companies and contacts.
+3. A tech-savvy user should be able to open the data file in a standard text editor and understand the stored application fields and optional event data.
 4. The system must be able to read and migrate data files produced by earlier versions of the same product within the same major version.
 5. The application should prevent logically inconsistent or invalid data from being stored (e.g. unsupported status values or deadlines in an invalid format).
 
@@ -907,18 +905,16 @@ Related interactions with similar flow:
 * **Role**: The position/title applied for.
 * **Status**: The current stage of an internship application (e.g. APPLIED, INTERVIEWING, OFFERED, REJECTED, WITHDRAWN).
 * **Company**: The organisation that offers the opportunity.
-* **Record**: The complete collection of information stored in the system about users submitting internship applications to enterprises.
-* **Industry Categorization**: The industry labels marked by users for enterprises (such as Internet, finance, manufacturing, etc.)
-* **Archive**: Move the internship application records that have completed the process (such as those that have been rejected, hired, and have completed onboarding) from the active list to the archive area.
-* **Reminder**: Time reminders for the deadline of internship applications, interview times, and follow-up nodes.
-* **Deadline**: The time by which a submission is due for an opportunity record.
+* **Record**: One application entry in Hired!, including fields such as role, company, status, deadline, tags, note, and optional event details.
+* **Reminder**: A command that sorts applications by deadline and applies deadline-based highlighting in the UI.
+* **Deadline**: The date/time stored on an application and used by `reminder` and `sort time`.
 * **ApplicationEvent**: An optional event associated with an application, such as an online assessment or interview.
 * **OnlineAssessment**: A type of ApplicationEvent representing online coding tests or assessments with platform and link information.
 * **Interview**: A type of ApplicationEvent representing interview appointments with optional interviewer name and type details.
 * **MSS**: Main Success Scenario. The primary, happy-path flow of a use case, describing what happens when everything goes as expected with no errors or exceptions
 * **JSON Data File**: A JSON format text file used for local storage of all internship data.
-* **Executable JAR**: Package it as a single executable file and double-click to run it.
-* **Data Integrity**: Data is automatically saved without loss, logically legal and free of contradictions.
+* **Executable JAR**: The runnable packaged application file (`hired.jar`) used to launch Hired!.
+* **Data Integrity**: The property that stored data remains valid and internally consistent with model constraints.
 
 --------------------------------------------------------------------------------------------------------------------
 
