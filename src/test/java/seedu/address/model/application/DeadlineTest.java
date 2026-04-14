@@ -27,7 +27,7 @@ public class DeadlineTest {
         assertTrue(early.compareTo(late) < 0);
         // late > early
         assertTrue(late.compareTo(early) > 0);
-        // empty 排在最后 (假设你在 compareTo 里写了空值检查)
+        // empty deadline is ordered after concrete deadlines
         assertTrue(late.compareTo(empty) < 0);
     }
 

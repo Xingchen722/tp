@@ -8,15 +8,16 @@ import seedu.address.model.Model;
 import seedu.address.model.application.RoleContainsKeywordsPredicate;
 
 /**
- * Finds and lists all applications in the address book whose role contains any of the argument keywords.
+ * Finds and lists all applications whose role or company name contains any of the argument keywords.
  * Keyword matching is case-insensitive.
  */
 public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all applications whose names contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all applications whose role or company name "
+            + "contains any of the specified keywords (case-insensitive) and displays them as a list with index "
+            + "numbers.\n"
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
             + "Example: " + COMMAND_WORD + " software engineer";
 

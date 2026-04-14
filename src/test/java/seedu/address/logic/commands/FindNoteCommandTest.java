@@ -1,8 +1,9 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_APPLICATIONS_LISTED_OVERVIEW;
-import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalApplications.getTypicalAddressBook;
 
 import java.util.Arrays;
@@ -31,13 +32,11 @@ public class FindNoteCommandTest {
         FindNoteCommand findFirstCommand = new FindNoteCommand(firstPredicate);
         FindNoteCommand findSecondCommand = new FindNoteCommand(secondPredicate);
 
-        assertEquals(findFirstCommand, findFirstCommand);
-        assertEquals(findFirstCommand, new FindNoteCommand(firstPredicate));
-        assertThrows(AssertionError.class, () -> {
-            throw new AssertionError();
-        });
-        org.junit.jupiter.api.Assertions.assertNotEquals(findFirstCommand, null);
-        org.junit.jupiter.api.Assertions.assertNotEquals(findFirstCommand, findSecondCommand);
+        assertTrue(findFirstCommand.equals(findFirstCommand));
+        assertTrue(findFirstCommand.equals(new FindNoteCommand(firstPredicate)));
+        assertFalse(findFirstCommand.equals(1));
+        assertFalse(findFirstCommand.equals(null));
+        assertFalse(findFirstCommand.equals(findSecondCommand));
     }
 
     @Test
@@ -65,6 +64,21 @@ public class FindNoteCommandTest {
         String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW,
                 expectedModel.getFilteredApplicationList().size());
 
+        assertEquals(expectedMessage, command.execute(model).getFeedbackToUser());
+        assertEquals(expectedModel.getFilteredApplicationList(), model.getFilteredApplicationList());
+    }
+
+    @Test
+    public void execute_one_extraKeyword() {
+        model.addApplication(new ApplicationBuilder().withRole("Intern C").withNote("Follow up with HR").build());
+        expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        NoteContainsKeywordsPredicate predicate = preparePredicate("follow zzznotfound");
+        FindNoteCommand command = new FindNoteCommand(predicate);
+        expectedModel.updateFilteredApplicationList(predicate);
+
+        String expectedMessage = String.format(MESSAGE_APPLICATIONS_LISTED_OVERVIEW,
+                expectedModel.getFilteredApplicationList().size());
         assertEquals(expectedMessage, command.execute(model).getFeedbackToUser());
         assertEquals(expectedModel.getFilteredApplicationList(), model.getFilteredApplicationList());
     }

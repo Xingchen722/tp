@@ -22,6 +22,11 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_validArgs_returnsFindCommand() {
+        // single keyword
+        FindCommand singleKeywordCommand =
+                new FindCommand(new RoleContainsKeywordsPredicate(Arrays.asList("Engineer")));
+        assertParseSuccess(parser, "Engineer", singleKeywordCommand);
+
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
                 new FindCommand(new RoleContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
